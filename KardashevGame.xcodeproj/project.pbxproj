@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		065586E3236A93190DAF0D42 /* RunCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BA78960BE0B5B0DF5CAD91 /* RunCardView.swift */; };
+		0EAEE923DD136E4E49D3D3F7 /* PlanetGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9D184BB44FAF99A96654B2 /* PlanetGenerator.swift */; };
 		1000000000000001 /* KardashevGameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2000000000000001 /* KardashevGameApp.swift */; };
 		1000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2000000000000002 /* ContentView.swift */; };
 		1000000000000003 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2000000000000003 /* MainMenuView.swift */; };
@@ -36,6 +38,13 @@
 		1000000000000027 /* BalanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2000000000000027 /* BalanceConfig.swift */; };
 		1000000000000028 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2000000000000028 /* Extensions.swift */; };
 		1000000000000029 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2000000000000029 /* Assets.xcassets */; };
+		1D0B5A832E75F111B849E481 /* PlanetSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C108957D14EFD024C7FCD2 /* PlanetSeed.swift */; };
+		323545DABEB257007FDEA74B /* NewRunView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DFF5126AF010459E4202C3 /* NewRunView.swift */; };
+		913D14031AF8A18CDA17D69E /* RunManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5647F256D95C877F2646B9AC /* RunManager.swift */; };
+		9F7FE4F91F0FADE745ECB9C7 /* RunStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6DB1FF8481C67B1C87F7682 /* RunStatsView.swift */; };
+		BCA2C9322C3DEF44C79174CD /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2681344787618157801140 /* Run.swift */; };
+		DD36BCC28D0936C2415D6534 /* RunSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4185F1D1EEF3FBA9F200BBA8 /* RunSelectionView.swift */; };
+		E0222E5B1B36536861EE123A /* SeededRandomNumberGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F8C9438AA866C1E9CC7B43 /* SeededRandomNumberGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,7 +78,16 @@
 		2000000000000028 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2000000000000029 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2000000000000030 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		25BA78960BE0B5B0DF5CAD91 /* RunCardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RunCardView.swift; path = KardashevGame/Views/Components/RunCardView.swift; sourceTree = "<group>"; };
 		3000000000000001 /* KardashevGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KardashevGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4185F1D1EEF3FBA9F200BBA8 /* RunSelectionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RunSelectionView.swift; path = KardashevGame/Views/RunSelectionView.swift; sourceTree = "<group>"; };
+		54DFF5126AF010459E4202C3 /* NewRunView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NewRunView.swift; path = KardashevGame/Views/NewRunView.swift; sourceTree = "<group>"; };
+		5647F256D95C877F2646B9AC /* RunManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RunManager.swift; path = KardashevGame/Managers/RunManager.swift; sourceTree = "<group>"; };
+		6A2681344787618157801140 /* Run.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Run.swift; path = KardashevGame/Models/Run.swift; sourceTree = "<group>"; };
+		76F8C9438AA866C1E9CC7B43 /* SeededRandomNumberGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SeededRandomNumberGenerator.swift; path = KardashevGame/Utils/SeededRandomNumberGenerator.swift; sourceTree = "<group>"; };
+		97C108957D14EFD024C7FCD2 /* PlanetSeed.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlanetSeed.swift; path = KardashevGame/Models/PlanetSeed.swift; sourceTree = "<group>"; };
+		A6DB1FF8481C67B1C87F7682 /* RunStatsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RunStatsView.swift; path = KardashevGame/Views/RunStatsView.swift; sourceTree = "<group>"; };
+		FD9D184BB44FAF99A96654B2 /* PlanetGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlanetGenerator.swift; path = KardashevGame/Utils/PlanetGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +141,9 @@
 				2000000000000005 /* ShopView.swift */,
 				2000000000000006 /* StatsView.swift */,
 				5000000000000010 /* Components */,
+				4185F1D1EEF3FBA9F200BBA8 /* RunSelectionView.swift */,
+				54DFF5126AF010459E4202C3 /* NewRunView.swift */,
+				A6DB1FF8481C67B1C87F7682 /* RunStatsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -146,6 +167,7 @@
 				2000000000000016 /* ProgressionManager.swift */,
 				2000000000000017 /* SaveManager.swift */,
 				2000000000000018 /* OfflineProgressManager.swift */,
+				5647F256D95C877F2646B9AC /* RunManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -159,6 +181,8 @@
 				2000000000000022 /* Technology.swift */,
 				2000000000000023 /* KardashevStage.swift */,
 				2000000000000024 /* GameState.swift */,
+				97C108957D14EFD024C7FCD2 /* PlanetSeed.swift */,
+				6A2681344787618157801140 /* Run.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -170,6 +194,8 @@
 				2000000000000026 /* Constants.swift */,
 				2000000000000027 /* BalanceConfig.swift */,
 				2000000000000028 /* Extensions.swift */,
+				76F8C9438AA866C1E9CC7B43 /* SeededRandomNumberGenerator.swift */,
+				FD9D184BB44FAF99A96654B2 /* PlanetGenerator.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -188,6 +214,7 @@
 				2000000000000007 /* ResourceDisplayView.swift */,
 				2000000000000008 /* BuildingCardView.swift */,
 				2000000000000009 /* ClickerButtonView.swift */,
+				25BA78960BE0B5B0DF5CAD91 /* RunCardView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -289,6 +316,15 @@
 				1000000000000026 /* Constants.swift in Sources */,
 				1000000000000027 /* BalanceConfig.swift in Sources */,
 				1000000000000028 /* Extensions.swift in Sources */,
+				1D0B5A832E75F111B849E481 /* PlanetSeed.swift in Sources */,
+				BCA2C9322C3DEF44C79174CD /* Run.swift in Sources */,
+				E0222E5B1B36536861EE123A /* SeededRandomNumberGenerator.swift in Sources */,
+				0EAEE923DD136E4E49D3D3F7 /* PlanetGenerator.swift in Sources */,
+				913D14031AF8A18CDA17D69E /* RunManager.swift in Sources */,
+				DD36BCC28D0936C2415D6534 /* RunSelectionView.swift in Sources */,
+				323545DABEB257007FDEA74B /* NewRunView.swift in Sources */,
+				9F7FE4F91F0FADE745ECB9C7 /* RunStatsView.swift in Sources */,
+				065586E3236A93190DAF0D42 /* RunCardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
