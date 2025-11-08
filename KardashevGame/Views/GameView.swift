@@ -24,11 +24,51 @@ struct GameView: View {
             
             // UI Overlay
             VStack {
-                // Top Bar - Risorse
+                // Top Bar - Risorse e Score
                 HStack {
-                    ResourceDisplayView(resource: gameManager.gameState.resources.energy)
+                    // Back to runs button
+                    if gameManager.currentRun != nil {
+                        Button(action: {
+                            gameManager.saveGame()
+                            RunManager.shared.currentRun = nil
+                        }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "chevron.left")
+                                    .font(.system(size: 16, weight: .bold))
+                                Text("RUNS")
+                                    .font(.system(size: 14, weight: .bold))
+                            }
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color.black.opacity(0.6))
+                            )
+                        }
+                    }
                     
                     Spacer()
+                    
+                    // Score display
+                    if let currentRun = gameManager.currentRun {
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text("SCORE")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundColor(.gray)
+                            Text("\(currentRun.currentScore)")
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundColor(.kardashevAccent)
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color.black.opacity(0.6))
+                        )
+                    }
+                    
+                    ResourceDisplayView(resource: gameManager.gameState.resources.energy)
                     
                     // Menu buttons
                     HStack(spacing: 12) {
