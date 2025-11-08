@@ -48,19 +48,25 @@ struct BalanceConfig {
     static func buildingCost(baseCost: Double, level: BigNumber, multiplier: Double) -> BigNumber {
         // Usa la formula: baseCost * (multiplier ^ level)
         // Per evitare overflow, usiamo logaritmi: log(cost) = log(baseCost) + level * log(multiplier)
-        guard let levelDouble = level.toDouble(), levelDouble >= 0 else {
-            // Se il livello è troppo grande per convertire in Double, usa l'approssimazione BigNumber
-            let logBaseCost = log10(baseCost)
-            let logMultiplier = log10(multiplier)
-            let logCost = logBaseCost + (level.mantissa * pow(10.0, Double(level.exponent))) * logMultiplier
-            let exponent = Int(floor(logCost))
-            let mantissa = pow(10.0, logCost - Double(exponent))
-            return BigNumber(mantissa: mantissa, exponent: exponent)
+        
+        // Calcola il livello come double se possibile, altrimenti usa approssimazione
+        let levelValue: Double
+        if let levelDouble = level.toDouble() {
+            levelValue = levelDouble
+        } else {
+            // Per livelli enormi, usa mantissa * 10^exponent
+            levelValue = level.mantissa * pow(10.0, Double(level.exponent))
         }
         
-        // Per livelli piccoli usa il calcolo diretto
-        let cost = baseCost * pow(multiplier, levelDouble)
-        return BigNumber(cost)
+        // Usa logaritmi per calcolare in modo sicuro
+        let logBaseCost = log10(baseCost)
+        let logMultiplier = log10(multiplier)
+        let logCost = logBaseCost + levelValue * logMultiplier
+        
+        // Converti back da logaritmo a BigNumber
+        let exponent = Int(floor(logCost))
+        let mantissa = pow(10.0, logCost - Double(exponent))
+        return BigNumber(mantissa: mantissa, exponent: exponent)
     }
     
     /// Calcola la produzione di un edificio al livello specificato
