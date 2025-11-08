@@ -143,7 +143,7 @@ struct RunStatsView: View {
                 
                 Spacer()
                 
-                Text("\(run.finalScore ?? run.currentScore)")
+                Text((run.finalScore ?? run.currentScore).formatted())
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(.kardashevSuccess)
             }
@@ -176,7 +176,7 @@ struct RunStatsView: View {
         )
     }
     
-    private func scoreBreakdownRow(label: String, value: Int, total: Int) -> some View {
+    private func scoreBreakdownRow(label: String, value: BigNumber, total: BigNumber) -> some View {
         HStack {
             Text(label)
                 .font(.system(size: 14))
@@ -184,12 +184,12 @@ struct RunStatsView: View {
             
             Spacer()
             
-            Text("\(value)")
+            Text(value.formatted())
                 .font(.system(size: 14, weight: .bold))
                 .foregroundColor(.white)
             
-            if total > 0 {
-                Text("(\(Int(Double(value) / Double(total) * 100))%)")
+            if total > BigNumber(0), let valueDouble = value.toDouble(), let totalDouble = total.toDouble() {
+                Text("(\(Int(valueDouble / totalDouble * 100))%)")
                     .font(.system(size: 12))
                     .foregroundColor(.gray)
             }
@@ -203,9 +203,9 @@ struct RunStatsView: View {
                 .foregroundColor(.white)
             
             statRow(icon: "⏱", label: "Tempo Giocato", value: run.formattedPlayTime())
-            statRow(icon: "🖱", label: "Click Totali", value: "\(run.statistics.totalClicks)")
+            statRow(icon: "🖱", label: "Click Totali", value: run.statistics.totalClicks.formatted())
             statRow(icon: "⚡️", label: "Energia Generata", value: run.statistics.totalEnergyGenerated.formatted())
-            statRow(icon: "🏗", label: "Edifici Acquistati", value: "\(run.statistics.buildingsPurchased)")
+            statRow(icon: "🏗", label: "Edifici Acquistati", value: run.statistics.buildingsPurchased.formatted())
             statRow(icon: "🎯", label: "Stage Corrente", value: run.gameState.civilization.stage.displayName)
             statRow(icon: "📅", label: "Data Creazione", value: formatDate(run.createdAt))
             statRow(icon: "🕐", label: "Ultima Giocata", value: formatDate(run.lastPlayedAt))
@@ -244,13 +244,13 @@ struct RunStatsView: View {
                 .foregroundColor(.white)
             
             let avgScore = runManager.averageScore()
-            let currentScore = Double(run.finalScore ?? run.currentScore)
+            let currentScore = run.finalScore ?? run.currentScore
             let scoreDiff = currentScore - avgScore
             
             comparisonRow(
                 label: "Score vs Media",
-                value: scoreDiff >= 0 ? "+\(Int(scoreDiff))" : "\(Int(scoreDiff))",
-                isPositive: scoreDiff >= 0
+                value: (scoreDiff >= BigNumber(0) ? "+" : "") + scoreDiff.formatted(),
+                isPositive: scoreDiff >= BigNumber(0)
             )
             
             comparisonRow(

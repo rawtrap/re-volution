@@ -225,9 +225,9 @@ class GameManager: ObservableObject {
         currentRun.statistics.totalEnergyGenerated = gameState.civilization.totalEnergyGenerated
         
         // Conta edifici acquistati
-        var buildingCount = 0
+        var buildingCount = BigNumber(0)
         for (_, building) in gameState.buildings {
-            buildingCount += building.level
+            buildingCount = buildingCount + building.level
         }
         currentRun.statistics.buildingsPurchased = buildingCount
         

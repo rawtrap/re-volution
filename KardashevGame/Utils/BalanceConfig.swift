@@ -45,14 +45,28 @@ struct BalanceConfig {
     static let prestigeMultiplierBase = 0.05 // 5% bonus per prestige
     
     /// Calcola il costo di un edificio al livello specificato
-    static func buildingCost(baseCost: Double, level: Int, multiplier: Double) -> BigNumber {
-        let cost = baseCost * pow(multiplier, Double(level))
+    static func buildingCost(baseCost: Double, level: BigNumber, multiplier: Double) -> BigNumber {
+        // Usa la formula: baseCost * (multiplier ^ level)
+        // Per evitare overflow, usiamo logaritmi: log(cost) = log(baseCost) + level * log(multiplier)
+        guard let levelDouble = level.toDouble(), levelDouble >= 0 else {
+            // Se il livello è troppo grande per convertire in Double, usa l'approssimazione BigNumber
+            let logBaseCost = log10(baseCost)
+            let logMultiplier = log10(multiplier)
+            let logCost = logBaseCost + (level.mantissa * pow(10.0, Double(level.exponent))) * logMultiplier
+            let exponent = Int(floor(logCost))
+            let mantissa = pow(10.0, logCost - Double(exponent))
+            return BigNumber(mantissa: mantissa, exponent: exponent)
+        }
+        
+        // Per livelli piccoli usa il calcolo diretto
+        let cost = baseCost * pow(multiplier, levelDouble)
         return BigNumber(cost)
     }
     
     /// Calcola la produzione di un edificio al livello specificato
-    static func buildingProduction(baseProduction: Double, level: Int, multiplier: Double) -> BigNumber {
-        let production = baseProduction * Double(level) * multiplier
-        return BigNumber(production)
+    static func buildingProduction(baseProduction: Double, level: BigNumber, multiplier: Double) -> BigNumber {
+        // Produzione = baseProduction * level * multiplier
+        let baseBigNumber = BigNumber(baseProduction * multiplier)
+        return baseBigNumber * level
     }
 }

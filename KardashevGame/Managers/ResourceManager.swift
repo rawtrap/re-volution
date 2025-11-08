@@ -17,7 +17,7 @@ class ResourceManager {
         var total = BigNumber(0)
         
         for (_, building) in buildings {
-            if building.level > 0 {
+            if building.level > BigNumber(0) {
                 total = total + building.totalProduction()
             }
         }
@@ -43,7 +43,7 @@ class ResourceManager {
     func performClick(gameState: GameState) {
         let reward = gameState.civilization.clickReward()
         gameState.resources.energy.add(reward)
-        gameState.civilization.totalClicks += 1
+        gameState.civilization.totalClicks = gameState.civilization.totalClicks + BigNumber(1)
         gameState.civilization.totalEnergyGenerated = gameState.civilization.totalEnergyGenerated + reward
     }
     
@@ -69,7 +69,7 @@ class ResourceManager {
         gameState.resources.energy.subtract(cost)
         
         // Aumenta livello
-        building.level += 1
+        building.level = building.level + BigNumber(1)
         gameState.buildings[type] = building
         
         print("✅ Acquistato \(type.rawValue) livello \(building.level)")
