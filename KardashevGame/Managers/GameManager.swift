@@ -182,7 +182,7 @@ class GameManager: ObservableObject {
         
         // Applica moltiplicatori specifici per tipo di edificio
         for (type, building) in gameState.buildings {
-            guard var building = gameState.buildings[type], building.level > 0 else { continue }
+            guard var building = gameState.buildings[type], building.level > BigNumber(0) else { continue }
             
             // Mappa edifici ai moltiplicatori risorsa appropriati
             let multiplier: Double
@@ -243,3 +243,4 @@ class GameManager: ObservableObject {
         lastUpdateTime = Date()
     }
 }
+

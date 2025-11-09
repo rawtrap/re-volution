@@ -60,7 +60,7 @@ class ProgressionManager {
         // Reset edifici
         for type in BuildingType.allCases {
             let unlocked = (type == .solarGenerator || type == .nuclearPlant)
-            gameState.buildings[type] = Building(type: type, level: 0, unlocked: unlocked)
+            gameState.buildings[type] = Building(type: type, level: BigNumber(0), unlocked: unlocked)
         }
         
         print("⭐️ Prestige \(oldPrestigeLevel) -> \(gameState.civilization.prestigeLevel)")

@@ -25,7 +25,7 @@ class GameState: ObservableObject, Codable {
         // Inizializza edifici
         for type in BuildingType.allCases {
             let unlocked = (type == .solarGenerator || type == .nuclearPlant)
-            buildings[type] = Building(type: type, level: 0, unlocked: unlocked)
+            buildings[type] = Building(type: type, level: BigNumber(0), unlocked: unlocked)
         }
         
         // Inizializza tecnologie (per future espansioni)

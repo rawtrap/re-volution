@@ -116,7 +116,7 @@ class RunManager: ObservableObject {
         let gameState = run.gameState
         
         // Score base: energia totale / 1000
-        let energyScore = gameState.resources.energy / BigNumber(1000.0)
+        let energyScore = gameState.resources.energy.amount / BigNumber(1000.0)
         
         // Score stage: stage corrente * 10000
         let stageScore = BigNumber(Double(gameState.civilization.stage.rawValue * 10000))

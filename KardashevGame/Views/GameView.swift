@@ -99,7 +99,7 @@ struct GameView: View {
                         .font(.system(size: 14, weight: .bold))
                         .foregroundColor(.white)
                     
-                    if gameManager.gameState.civilization.prestigeLevel > 0 {
+                    if gameManager.gameState.civilization.prestigeLevel > BigNumber(0) {
                         Text("Prestige: \(gameManager.gameState.civilization.prestigeLevel) (\(gameManager.gameState.civilization.prestigeMultiplier, specifier: "%.2f")x)")
                             .font(.system(size: 12))
                             .foregroundColor(.kardashevAccent)
