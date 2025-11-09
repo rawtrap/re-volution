@@ -112,21 +112,21 @@ class RunManager: ObservableObject {
     // MARK: - Score Calculation
     
     /// Calcola il punteggio corrente per una run
-    func calculateCurrentScore(for run: Run) -> Int {
+    func calculateCurrentScore(for run: Run) -> BigNumber {
         let gameState = run.gameState
         
         // Score base: energia totale / 1000
-        let energyScore = Int(gameState.resources.energy.toDouble() / 1000.0)
+        let energyScore = gameState.resources.energy / BigNumber(1000.0)
         
         // Score stage: stage corrente * 10000
-        let stageScore = gameState.civilization.stage.rawValue * 10000
+        let stageScore = BigNumber(Double(gameState.civilization.stage.rawValue * 10000))
         
         // Score progresso stage (placeholder, sarà più complesso)
-        let progressScore = Int(run.stageProgress() * 100)
+        let progressScore = BigNumber(run.stageProgress() * 100)
         
         // Applica moltiplicatore difficoltà
         let baseScore = energyScore + stageScore + progressScore
-        let finalScore = Int(Double(baseScore) * run.planetSeed.difficultyRating.scoreMultiplier)
+        let finalScore = baseScore * run.planetSeed.difficultyRating.scoreMultiplier
         
         return finalScore
     }
@@ -144,12 +144,13 @@ class RunManager: ObservableObject {
     }
     
     /// Calcola la media dei punteggi
-    func averageScore() -> Double {
-        guard !runs.isEmpty else { return 0 }
-        let totalScore = runs.reduce(0) { sum, run in
-            sum + (run.finalScore ?? run.currentScore)
+    func averageScore() -> BigNumber {
+        guard !runs.isEmpty else { return BigNumber(0) }
+        var totalScore = BigNumber(0)
+        for run in runs {
+            totalScore = totalScore + (run.finalScore ?? run.currentScore)
         }
-        return Double(totalScore) / Double(runs.count)
+        return totalScore / BigNumber(Double(runs.count))
     }
     
     /// Calcola il tasso di completamento

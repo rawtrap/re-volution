@@ -64,7 +64,7 @@ struct RunCardView: View {
                     statItem(
                         icon: "⚡️",
                         label: "Score",
-                        value: "\(run.finalScore ?? run.currentScore)"
+                        value: (run.finalScore ?? run.currentScore).formatted()
                     )
                     
                     statItem(

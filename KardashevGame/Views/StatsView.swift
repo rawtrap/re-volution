@@ -41,7 +41,7 @@ struct StatsView: View {
                             StatCard(
                                 icon: "👆",
                                 title: "Click Totali",
-                                value: "\(gameManager.gameState.civilization.totalClicks)"
+                                value: gameManager.gameState.civilization.totalClicks.formatted()
                             )
                             
                             StatCard(
@@ -50,11 +50,11 @@ struct StatsView: View {
                                 value: gameManager.gameState.resources.energy.productionPerSecond.formatted()
                             )
                             
-                            if gameManager.gameState.civilization.prestigeLevel > 0 {
+                            if gameManager.gameState.civilization.prestigeLevel > BigNumber(0) {
                                 StatCard(
                                     icon: "⭐️",
                                     title: "Livello Prestige",
-                                    value: "\(gameManager.gameState.civilization.prestigeLevel)"
+                                    value: gameManager.gameState.civilization.prestigeLevel.formatted()
                                 )
                                 
                                 StatCard(
@@ -74,7 +74,7 @@ struct StatsView: View {
                                 .padding(.horizontal)
                             
                             ForEach(BuildingType.allCases, id: \.rawValue) { type in
-                                if let building = gameManager.gameState.buildings[type], building.level > 0 {
+                                if let building = gameManager.gameState.buildings[type], building.level > BigNumber(0) {
                                     HStack {
                                         Text(building.type.icon)
                                             .font(.title2)
@@ -84,7 +84,7 @@ struct StatsView: View {
                                                 .font(.system(size: 14, weight: .semibold))
                                                 .foregroundColor(.white)
                                             
-                                            Text("Livello \(building.level)")
+                                            Text("Livello \(building.level.formatted())")
                                                 .font(.system(size: 12))
                                                 .foregroundColor(.gray)
                                         }

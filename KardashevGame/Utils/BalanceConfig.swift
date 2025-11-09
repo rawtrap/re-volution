@@ -45,14 +45,34 @@ struct BalanceConfig {
     static let prestigeMultiplierBase = 0.05 // 5% bonus per prestige
     
     /// Calcola il costo di un edificio al livello specificato
-    static func buildingCost(baseCost: Double, level: Int, multiplier: Double) -> BigNumber {
-        let cost = baseCost * pow(multiplier, Double(level))
-        return BigNumber(cost)
+    static func buildingCost(baseCost: Double, level: BigNumber, multiplier: Double) -> BigNumber {
+        // Usa la formula: baseCost * (multiplier ^ level)
+        // Per evitare overflow, usiamo logaritmi: log(cost) = log(baseCost) + level * log(multiplier)
+        
+        // Calcola il livello come double se possibile, altrimenti usa approssimazione
+        let levelValue: Double
+        if let levelDouble = level.toDouble() {
+            levelValue = levelDouble
+        } else {
+            // Per livelli enormi, usa mantissa * 10^exponent
+            levelValue = level.mantissa * pow(10.0, Double(level.exponent))
+        }
+        
+        // Usa logaritmi per calcolare in modo sicuro
+        let logBaseCost = log10(baseCost)
+        let logMultiplier = log10(multiplier)
+        let logCost = logBaseCost + levelValue * logMultiplier
+        
+        // Converti back da logaritmo a BigNumber
+        let exponent = Int(floor(logCost))
+        let mantissa = pow(10.0, logCost - Double(exponent))
+        return BigNumber(mantissa: mantissa, exponent: exponent)
     }
     
     /// Calcola la produzione di un edificio al livello specificato
-    static func buildingProduction(baseProduction: Double, level: Int, multiplier: Double) -> BigNumber {
-        let production = baseProduction * Double(level) * multiplier
-        return BigNumber(production)
+    static func buildingProduction(baseProduction: Double, level: BigNumber, multiplier: Double) -> BigNumber {
+        // Produzione = baseProduction * level * multiplier
+        let baseBigNumber = BigNumber(baseProduction * multiplier)
+        return baseBigNumber * level
     }
 }

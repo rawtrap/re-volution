@@ -10,16 +10,16 @@ import Foundation
 /// Rappresenta la civiltà del giocatore
 struct Civilization: Codable {
     var stage: KardashevStage
-    var prestigeLevel: Int
+    var prestigeLevel: BigNumber
     var prestigeMultiplier: Double
-    var totalClicks: Int
+    var totalClicks: BigNumber
     var totalEnergyGenerated: BigNumber
     
     init() {
         self.stage = .type1
-        self.prestigeLevel = 0
+        self.prestigeLevel = BigNumber(0)
         self.prestigeMultiplier = 1.0
-        self.totalClicks = 0
+        self.totalClicks = BigNumber(0)
         self.totalEnergyGenerated = BigNumber(0)
     }
     
@@ -31,8 +31,10 @@ struct Civilization: Codable {
     
     /// Esegue un prestige
     mutating func performPrestige() {
-        prestigeLevel += 1
-        prestigeMultiplier = 1.0 + (Double(prestigeLevel) * BalanceConfig.prestigeMultiplierBase)
+        prestigeLevel = prestigeLevel + BigNumber(1)
+        if let levelDouble = prestigeLevel.toDouble() {
+            prestigeMultiplier = 1.0 + (levelDouble * BalanceConfig.prestigeMultiplierBase)
+        }
     }
     
     /// Verifica se può avanzare allo stage successivo

@@ -51,12 +51,12 @@ enum EvolutionPath: String, Codable, CaseIterable {
 
 /// Statistiche dettagliate per una run
 struct RunStatistics: Codable {
-    var totalClicks: Int = 0
+    var totalClicks: BigNumber = BigNumber(0)
     var totalEnergyGenerated: BigNumber = BigNumber(0)
-    var buildingsPurchased: Int = 0
-    var technologiesResearched: Int = 0
-    var planetsColonized: Int = 0
-    var disastersSurvived: Int = 0
+    var buildingsPurchased: BigNumber = BigNumber(0)
+    var technologiesResearched: BigNumber = BigNumber(0)
+    var planetsColonized: BigNumber = BigNumber(0)
+    var disastersSurvived: BigNumber = BigNumber(0)
     
     // Tempo per stage (in secondi)
     var timeInStage1: TimeInterval = 0
@@ -70,15 +70,15 @@ struct RunStatistics: Codable {
 
 /// Score breakdown dettagliato
 struct ScoreBreakdown: Codable {
-    var stageProgress: Int = 0
-    var efficiencyBonus: Int = 0
-    var speedBonus: Int = 0
-    var technologyBonus: Int = 0
-    var expansionBonus: Int = 0
-    var difficultyBonus: Int = 0
-    var survivalBonus: Int = 0
+    var stageProgress: BigNumber = BigNumber(0)
+    var efficiencyBonus: BigNumber = BigNumber(0)
+    var speedBonus: BigNumber = BigNumber(0)
+    var technologyBonus: BigNumber = BigNumber(0)
+    var expansionBonus: BigNumber = BigNumber(0)
+    var difficultyBonus: BigNumber = BigNumber(0)
+    var survivalBonus: BigNumber = BigNumber(0)
     
-    var totalScore: Int {
+    var totalScore: BigNumber {
         return stageProgress + efficiencyBonus + speedBonus + 
                technologyBonus + expansionBonus + difficultyBonus + survivalBonus
     }
@@ -96,8 +96,8 @@ class Run: ObservableObject, Codable, Identifiable {
     
     // Stato run
     @Published var status: GameOverReason
-    @Published var currentScore: Int
-    var finalScore: Int?
+    @Published var currentScore: BigNumber
+    var finalScore: BigNumber?
     var scoreBreakdown: ScoreBreakdown
     
     // Game state
@@ -117,7 +117,7 @@ class Run: ObservableObject, Codable, Identifiable {
         self.lastPlayedAt = Date()
         self.totalPlayTime = 0
         self.status = .inProgress
-        self.currentScore = 0
+        self.currentScore = BigNumber(0)
         self.finalScore = nil
         self.scoreBreakdown = ScoreBreakdown()
         self.gameState = GameState()
@@ -142,8 +142,8 @@ class Run: ObservableObject, Codable, Identifiable {
         lastPlayedAt = try container.decode(Date.self, forKey: .lastPlayedAt)
         totalPlayTime = try container.decode(TimeInterval.self, forKey: .totalPlayTime)
         status = try container.decode(GameOverReason.self, forKey: .status)
-        currentScore = try container.decode(Int.self, forKey: .currentScore)
-        finalScore = try container.decodeIfPresent(Int.self, forKey: .finalScore)
+        currentScore = try container.decode(BigNumber.self, forKey: .currentScore)
+        finalScore = try container.decodeIfPresent(BigNumber.self, forKey: .finalScore)
         scoreBreakdown = try container.decode(ScoreBreakdown.self, forKey: .scoreBreakdown)
         gameState = try container.decode(GameState.self, forKey: .gameState)
         statistics = try container.decode(RunStatistics.self, forKey: .statistics)

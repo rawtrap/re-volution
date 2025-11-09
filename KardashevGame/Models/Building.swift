@@ -119,10 +119,10 @@ enum BuildingType: String, Codable, CaseIterable {
 struct Building: Codable, Identifiable {
     let id: UUID
     let type: BuildingType
-    var level: Int
+    var level: BigNumber
     var unlocked: Bool
     
-    init(type: BuildingType, level: Int = 0, unlocked: Bool = false) {
+    init(type: BuildingType, level: BigNumber = BigNumber(0), unlocked: Bool = false) {
         self.id = UUID()
         self.type = type
         self.level = level
@@ -140,7 +140,7 @@ struct Building: Codable, Identifiable {
     
     /// Calcola la produzione totale di questo edificio
     func totalProduction() -> BigNumber {
-        if level == 0 {
+        if level <= BigNumber(0) {
             return BigNumber(0)
         }
         return BalanceConfig.buildingProduction(

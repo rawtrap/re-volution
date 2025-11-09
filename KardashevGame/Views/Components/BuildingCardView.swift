@@ -36,14 +36,14 @@ struct BuildingCardView: View {
                 
                 HStack(spacing: 8) {
                     // Livello
-                    if building.level > 0 {
-                        Text("Lv. \(building.level)")
+                    if building.level > BigNumber(0) {
+                        Text("Lv. \(building.level.formatted())")
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundColor(.kardashevAccent)
                     }
                     
                     // Produzione
-                    if building.level > 0 {
+                    if building.level > BigNumber(0) {
                         Text("+\(building.totalProduction().formatted())/s")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(.kardashevSuccess)
@@ -57,7 +57,7 @@ struct BuildingCardView: View {
             VStack(spacing: 4) {
                 Button(action: onPurchase) {
                     VStack(spacing: 2) {
-                        Text(building.level == 0 ? "Acquista" : "Upgrade")
+                        Text(building.level <= BigNumber(0) ? "Acquista" : "Upgrade")
                             .font(.system(size: 12, weight: .bold))
                         
                         Text(building.nextLevelCost().formatted())
