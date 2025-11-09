@@ -190,6 +190,13 @@ struct GameView: View {
         .sheet(isPresented: $showStats) {
             StatsView()
         }
+        .sheet(isPresented: $gameManager.showEvent) {
+            if let event = gameManager.currentEvent {
+                EventView(event: event) { choice in
+                    gameManager.handleEventChoice(choice)
+                }
+            }
+        }
     }
     
     private func createScene() -> SKScene {
