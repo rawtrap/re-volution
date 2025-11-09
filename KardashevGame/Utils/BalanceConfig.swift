@@ -10,7 +10,7 @@ import Foundation
 struct BalanceConfig {
     // MARK: - Click Manuale
     static let baseClickReward = 1.0
-    static let clickMultiplierPerStage = 10.0
+    static let clickMultiplierPerStage = 2.0  // Ridotto da 10.0
     
     // MARK: - Generatore Solare (Primo generatore)
     static let solarGeneratorBaseCost = 10.0
@@ -20,29 +20,36 @@ struct BalanceConfig {
     
     // MARK: - Centrale Nucleare (Secondo generatore)
     static let nuclearPlantBaseCost = 100.0
-    static let nuclearPlantBaseProduction = 1.0 // energia per secondo
-    static let nuclearPlantCostMultiplier = 1.15
+    static let nuclearPlantBaseProduction = 0.5  // Ridotto da 1.0
+    static let nuclearPlantCostMultiplier = 1.18  // Aumentato da 1.15
     static let nuclearPlantProductionMultiplier = 1.0
     
     // MARK: - Centrale a Fusione (Terzo generatore)
-    static let fusionPlantBaseCost = 1_100.0
-    static let fusionPlantBaseProduction = 8.0
-    static let fusionPlantCostMultiplier = 1.15
+    static let fusionPlantBaseCost = 1_500.0  // Aumentato da 1_100
+    static let fusionPlantBaseProduction = 3.0  // Ridotto da 8.0
+    static let fusionPlantCostMultiplier = 1.20  // Aumentato da 1.15
     static let fusionPlantProductionMultiplier = 1.0
     
     // MARK: - Fattoria Solare Orbitale (Quarto generatore)
-    static let orbitalFarmBaseCost = 12_000.0
-    static let orbitalFarmBaseProduction = 47.0
-    static let orbitalFarmCostMultiplier = 1.15
+    static let orbitalFarmBaseCost = 20_000.0  // Aumentato da 12_000
+    static let orbitalFarmBaseProduction = 15.0  // Ridotto da 47.0
+    static let orbitalFarmCostMultiplier = 1.22  // Aumentato da 1.15
     static let orbitalFarmProductionMultiplier = 1.0
     
     // MARK: - Progression
-    static let stage1ToStage2UnlockCost = 1_000_000.0
-    static let stage2ToStage3UnlockCost = 1_000_000_000.0
+    static let stage1ToStage2UnlockCost = 10_000_000.0  // Aumentato da 1M
+    static let stage2ToStage3UnlockCost = 10_000_000_000.0  // Aumentato da 1B
     
     // MARK: - Prestige
     static let prestigeMinEnergy = 100_000.0
     static let prestigeMultiplierBase = 0.05 // 5% bonus per prestige
+    
+    // MARK: - Offline
+    static let offlineMaxHours = 8.0
+    static let offlineMultiplier = 0.5
+    
+    // MARK: - Auto-save
+    static let autoSaveIntervalSeconds = 30.0
     
     /// Calcola il costo di un edificio al livello specificato
     static func buildingCost(baseCost: Double, level: BigNumber, multiplier: Double) -> BigNumber {

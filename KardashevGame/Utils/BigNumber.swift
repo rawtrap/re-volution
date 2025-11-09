@@ -64,8 +64,8 @@ struct BigNumber: Codable, Equatable {
             return "0"
         }
         
-        let suffixes = ["", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc", 
-                       "UDc", "DDc", "TDc", "QaDc", "QiDc", "SxDc", "SpDc", "OcDc", "NoDc", "Vg"]
+        // Suffissi standard per numeri grandi
+        let suffixes = ["", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc"]
         
         let suffixIndex = exponent / 3
         let displayExponent = exponent % 3
@@ -73,7 +73,7 @@ struct BigNumber: Codable, Equatable {
         
         if suffixIndex < suffixes.count {
             if suffixIndex == 0 && exponent < 3 {
-                // Numeri sotto 1000
+                // Numeri sotto 1000 - mostra con precisione appropriata
                 let value = toDouble() ?? 0
                 if value < 10 {
                     return String(format: "%.2f", value)
@@ -83,9 +83,10 @@ struct BigNumber: Codable, Equatable {
                     return String(format: "%.0f", value)
                 }
             }
+            // Numeri con suffisso - limita a 2 decimali
             return String(format: "%.2f%@", displayMantissa, suffixes[suffixIndex])
         } else {
-            // Per numeri estremamente grandi
+            // Per numeri estremamente grandi usa notazione scientifica
             return String(format: "%.2fe%d", mantissa, exponent)
         }
     }

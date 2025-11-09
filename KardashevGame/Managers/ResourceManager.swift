@@ -42,9 +42,16 @@ class ResourceManager {
     /// Esegue un click manuale
     func performClick(gameState: GameState) {
         let reward = gameState.civilization.clickReward()
-        gameState.resources.energy.add(reward)
+        let selectedResource = gameState.selectedClickResource
+        
+        // Aggiungi risorsa alla risorsa selezionata
+        gameState.resources[selectedResource].add(reward)
+        
+        // Aggiorna statistiche (mantiene energia come metrica principale per compatibilità)
         gameState.civilization.totalClicks = gameState.civilization.totalClicks + BigNumber(1)
-        gameState.civilization.totalEnergyGenerated = gameState.civilization.totalEnergyGenerated + reward
+        if selectedResource == .energy {
+            gameState.civilization.totalEnergyGenerated = gameState.civilization.totalEnergyGenerated + reward
+        }
     }
     
     /// Acquista un edificio
