@@ -162,6 +162,18 @@ struct GameView: View {
                 .padding(.bottom, 20)
             }
             
+            // Critical click feedback
+            if gameManager.showCriticalClick {
+                VStack {
+                    Text("💥 CRITICAL! x10 💥")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.yellow)
+                        .shadow(color: .orange, radius: 10)
+                }
+                .transition(.scale.combined(with: .opacity))
+                .animation(.spring(), value: gameManager.showCriticalClick)
+            }
+            
             // Offline reward popup
             if gameManager.showOfflineReward, let reward = gameManager.offlineReward {
                 OfflineRewardView(

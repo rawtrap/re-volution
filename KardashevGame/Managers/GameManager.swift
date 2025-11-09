@@ -15,6 +15,7 @@ class GameManager: ObservableObject {
     @Published var isPaused: Bool = false
     @Published var showOfflineReward: Bool = false
     @Published var offlineReward: OfflineProgressManager.OfflineReward?
+    @Published var showCriticalClick: Bool = false
     
     private var gameTimer: Timer?
     private var saveTimer: Timer?
@@ -110,7 +111,15 @@ class GameManager: ObservableObject {
     // MARK: - Actions
     
     func performClick() {
-        ResourceManager.shared.performClick(gameState: gameState)
+        let isCritical = ResourceManager.shared.performClick(gameState: gameState)
+        
+        // Show critical click feedback
+        if isCritical {
+            showCriticalClick = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                self?.showCriticalClick = false
+            }
+        }
     }
     
     func purchaseBuilding(_ type: BuildingType) -> Bool {
