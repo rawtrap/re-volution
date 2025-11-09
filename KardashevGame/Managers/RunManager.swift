@@ -115,17 +115,19 @@ class RunManager: ObservableObject {
     func calculateCurrentScore(for run: Run) -> BigNumber {
         let gameState = run.gameState
         
-        // Score base: energia totale / 1000
+        // Score energia: energia totale / 1000
         let energyScore = gameState.resources.energy.amount / BigNumber(1000.0)
         
         // Score stage: stage corrente * 10000
         let stageScore = BigNumber(Double(gameState.civilization.stage.rawValue * 10000))
         
-        // Score progresso stage (placeholder, sarà più complesso)
+        // Score progresso: progresso attraverso gli stage * 100
         let progressScore = BigNumber(run.stageProgress() * 100)
         
-        // Applica moltiplicatore difficoltà
+        // Score base
         let baseScore = energyScore + stageScore + progressScore
+        
+        // Applica moltiplicatore difficoltà
         let finalScore = baseScore * run.planetSeed.difficultyRating.scoreMultiplier
         
         return finalScore

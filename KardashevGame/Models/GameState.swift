@@ -14,6 +14,7 @@ class GameState: ObservableObject, Codable {
     @Published var buildings: [BuildingType: Building]
     @Published var technologies: [TechnologyType: Technology]
     @Published var lastSaveTime: Date
+    @Published var selectedClickResource: ResourceType
     
     init() {
         self.civilization = Civilization()
@@ -21,6 +22,7 @@ class GameState: ObservableObject, Codable {
         self.buildings = [:]
         self.technologies = [:]
         self.lastSaveTime = Date()
+        self.selectedClickResource = .energy
         
         // Inizializza edifici
         for type in BuildingType.allCases {
@@ -42,6 +44,7 @@ class GameState: ObservableObject, Codable {
         case buildings
         case technologies
         case lastSaveTime
+        case selectedClickResource
     }
     
     required init(from decoder: Decoder) throws {
@@ -51,6 +54,7 @@ class GameState: ObservableObject, Codable {
         buildings = try container.decode([BuildingType: Building].self, forKey: .buildings)
         technologies = try container.decode([TechnologyType: Technology].self, forKey: .technologies)
         lastSaveTime = try container.decode(Date.self, forKey: .lastSaveTime)
+        selectedClickResource = try container.decodeIfPresent(ResourceType.self, forKey: .selectedClickResource) ?? .energy
     }
     
     func encode(to encoder: Encoder) throws {
@@ -60,5 +64,31 @@ class GameState: ObservableObject, Codable {
         try container.encode(buildings, forKey: .buildings)
         try container.encode(technologies, forKey: .technologies)
         try container.encode(lastSaveTime, forKey: .lastSaveTime)
+        try container.encode(selectedClickResource, forKey: .selectedClickResource)
+    }
+    
+    // MARK: - Resource Unlock Logic
+    
+    /// Verifica se una risorsa è sbloccata in base alla progressione
+    func isResourceUnlocked(_ resourceType: ResourceType) -> Bool {
+        switch resourceType {
+        case .energy:
+            return true // Sempre disponibile
+        case .food:
+            // Sblocca al 10% del progresso verso Stage 2
+            let unlockThreshold = BigNumber(BalanceConfig.stage1ToStage2UnlockCost * 0.1)
+            return resources.energy.amount >= unlockThreshold
+        case .materials:
+            // Sblocca al 25% del progresso verso Stage 2
+            let unlockThreshold = BigNumber(BalanceConfig.stage1ToStage2UnlockCost * 0.25)
+            return resources.energy.amount >= unlockThreshold
+        case .knowledge:
+            // Sblocca al 50% del progresso verso Stage 2
+            let unlockThreshold = BigNumber(BalanceConfig.stage1ToStage2UnlockCost * 0.5)
+            return resources.energy.amount >= unlockThreshold
+        case .population:
+            // Sblocca in Stage 2
+            return civilization.stage.rawValue >= 2
+        }
     }
 }

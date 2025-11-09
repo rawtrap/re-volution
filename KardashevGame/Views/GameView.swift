@@ -68,7 +68,14 @@ struct GameView: View {
                         )
                     }
                     
-                    ResourceDisplayView(resource: gameManager.gameState.resources.energy)
+                    // All resources display
+                    HStack(spacing: 8) {
+                        ForEach([ResourceType.energy, .food, .materials, .knowledge, .population], id: \.self) { resourceType in
+                            if gameManager.gameState.isResourceUnlocked(resourceType) {
+                                ResourceDisplayView(resource: gameManager.gameState.resources[resourceType])
+                            }
+                        }
+                    }
                     
                     // Menu buttons
                     HStack(spacing: 12) {
@@ -92,6 +99,47 @@ struct GameView: View {
                 .padding()
                 
                 Spacer()
+                
+                // Resource selection buttons
+                VStack(spacing: 8) {
+                    Text("Click Genera:")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.gray)
+                    
+                    HStack(spacing: 12) {
+                        ForEach([ResourceType.energy, .food, .materials, .knowledge], id: \.self) { resourceType in
+                            if gameManager.gameState.isResourceUnlocked(resourceType) {
+                                Button(action: {
+                                    gameManager.gameState.selectedClickResource = resourceType
+                                }) {
+                                    VStack(spacing: 4) {
+                                        Text(resourceType.icon)
+                                            .font(.title2)
+                                        Text(resourceType.rawValue)
+                                            .font(.system(size: 10, weight: .medium))
+                                    }
+                                    .foregroundColor(gameManager.gameState.selectedClickResource == resourceType ? .kardashevAccent : .white)
+                                    .frame(width: 60, height: 60)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color.black.opacity(0.6))
+                                    )
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .stroke(gameManager.gameState.selectedClickResource == resourceType ? Color.kardashevAccent : Color.clear, lineWidth: 2)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.black.opacity(0.6))
+                )
+                .padding(.bottom, 8)
                 
                 // Stage info
                 VStack(spacing: 4) {

@@ -10,6 +10,7 @@ import Foundation
 /// Tipo di risorsa nel gioco
 enum ResourceType: String, Codable, CaseIterable {
     case energy = "Energia"
+    case food = "Cibo"
     case materials = "Materiali"
     case knowledge = "Conoscenza"
     case population = "Popolazione"
@@ -18,6 +19,8 @@ enum ResourceType: String, Codable, CaseIterable {
         switch self {
         case .energy:
             return "⚡️"
+        case .food:
+            return "🍎"
         case .materials:
             return "🔩"
         case .knowledge:
@@ -76,12 +79,14 @@ struct Resource: Codable {
 /// Collezione di tutte le risorse
 struct ResourceCollection: Codable {
     var energy: Resource
+    var food: Resource
     var materials: Resource
     var knowledge: Resource
     var population: Resource
     
     init() {
         self.energy = Resource(type: .energy)
+        self.food = Resource(type: .food)
         self.materials = Resource(type: .materials)
         self.knowledge = Resource(type: .knowledge)
         self.population = Resource(type: .population)
@@ -92,6 +97,7 @@ struct ResourceCollection: Codable {
         get {
             switch type {
             case .energy: return energy
+            case .food: return food
             case .materials: return materials
             case .knowledge: return knowledge
             case .population: return population
@@ -100,6 +106,7 @@ struct ResourceCollection: Codable {
         set {
             switch type {
             case .energy: energy = newValue
+            case .food: food = newValue
             case .materials: materials = newValue
             case .knowledge: knowledge = newValue
             case .population: population = newValue
