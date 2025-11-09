@@ -12,6 +12,7 @@ struct GameView: View {
     @ObservedObject var gameManager = GameManager.shared
     @State private var showShop = false
     @State private var showStats = false
+    @State private var showEvolution = false
     
     var body: some View {
         ZStack {
@@ -79,6 +80,14 @@ struct GameView: View {
                     
                     // Menu buttons
                     HStack(spacing: 12) {
+                        Button(action: { showEvolution = true }) {
+                            Image(systemName: "brain.head.profile")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .background(Circle().fill(Color.black.opacity(0.6)))
+                        }
+                        
                         Button(action: { showStats = true }) {
                             Image(systemName: "chart.bar.fill")
                                 .font(.title2)
@@ -189,6 +198,9 @@ struct GameView: View {
         }
         .sheet(isPresented: $showStats) {
             StatsView()
+        }
+        .sheet(isPresented: $showEvolution) {
+            EvolutionView()
         }
         .sheet(isPresented: $gameManager.showEvent) {
             if let event = gameManager.currentEvent {
