@@ -10,6 +10,9 @@ import Foundation
 class ResourceManager {
     static let shared = ResourceManager()
     
+    // Thread-safe queue per operazioni su risorse
+    private let resourceQueue = DispatchQueue(label: "com.kardashev.resources", qos: .userInteractive)
+    
     private init() {}
     
     /// Calcola la produzione totale per secondo
@@ -62,32 +65,51 @@ class ResourceManager {
         return isCritical
     }
     
-    /// Acquista un edificio
+    /// Acquista un edificio con validazione transazione
     func purchaseBuilding(type: BuildingType, gameState: GameState) -> Bool {
         guard var building = gameState.buildings[type] else {
+            print("❌ Building \(type.rawValue) non trovato")
             return false
         }
         
         // Verifica se è sbloccato
         if !building.unlocked {
+            print("❌ Building \(type.rawValue) non sbloccato")
             return false
         }
         
         let cost = building.nextLevelCost()
         
-        // Verifica se può permetterselo
-        guard gameState.resources.energy.canAfford(cost) else {
+        // Validazione: verifica che il costo sia positivo e valido
+        guard cost > BigNumber(0) else {
+            print("❌ Costo invalido per \(type.rawValue)")
             return false
         }
         
+        // Verifica se può permetterselo
+        guard gameState.resources.energy.canAfford(cost) else {
+            print("❌ Energia insufficiente per \(type.rawValue). Costo: \(cost.formatted()), Disponibile: \(gameState.resources.energy.amount.formatted())")
+            return false
+        }
+        
+        // Salva stato precedente per rollback
+        let previousAmount = gameState.resources.energy.amount
+        
         // Sottrai costo
         gameState.resources.energy.subtract(cost)
+        
+        // Validazione post-sottrazione: verifica che non sia diventato negativo
+        if gameState.resources.energy.amount < BigNumber(0) {
+            print("⚠️ Errore: risorsa negativa dopo acquisto, rollback")
+            gameState.resources.energy.amount = previousAmount
+            return false
+        }
         
         // Aumenta livello
         building.level = building.level + BigNumber(1)
         gameState.buildings[type] = building
         
-        print("✅ Acquistato \(type.rawValue) livello \(building.level)")
+        print("✅ Acquistato \(type.rawValue) livello \(building.level.formatted())")
         return true
     }
     

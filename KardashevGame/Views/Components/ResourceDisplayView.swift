@@ -10,54 +10,57 @@ import SwiftUI
 struct ResourceDisplayView: View {
     let resource: Resource
     @State private var previousAmount: String = ""
+    @State private var isIncreasing: Bool = false
     
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: DesignSystem.Spacing.small) {
             Text(resource.type.icon)
                 .font(.title2)
             
             VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: 4) {
-                    Text(resource.formattedAmount())
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                        .lineLimit(1)
-                        .minimumScaleFactor(UIConstants.minimumScaleFactor)
-                        .allowsTightening(true)
-                        .monospacedDigit()
-                        .onChange(of: resource.formattedAmount()) { newValue in
+                HStack(spacing: DesignSystem.Spacing.tiny) {
+                    AdaptiveText.numeric(
+                        resource.formattedAmount(),
+                        style: Font.system(size: 18, weight: .bold, design: .rounded),
+                        color: .white
+                    )
+                    .onChange(of: resource.formattedAmount()) { newValue in
+                        withAnimation(DesignSystem.Animation.quick) {
                             if !previousAmount.isEmpty && newValue != previousAmount {
-                                // Animazione quando cambia
+                                isIncreasing = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    isIncreasing = false
+                                }
                             }
                             previousAmount = newValue
                         }
+                    }
                     
                     if resource.productionPerSecond > BigNumber(0) {
-                        Text(resource.formattedProduction())
-                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                            .foregroundColor(.kardashevSuccess)
-                            .lineLimit(1)
-                            .minimumScaleFactor(UIConstants.minimumScaleFactor)
-                            .allowsTightening(true)
-                            .monospacedDigit()
+                        AdaptiveText.numeric(
+                            resource.formattedProduction(),
+                            style: Font.system(size: 12, weight: .medium, design: .rounded),
+                            color: .kardashevSuccess
+                        )
                     }
                 }
                 
-                Text(resource.type.rawValue)
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundColor(.gray)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
+                AdaptiveText(
+                    text: resource.type.rawValue,
+                    style: DesignSystem.Typography.small,
+                    color: .gray,
+                    minimumScale: DesignSystem.TextScaling.minimumScale
+                )
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, DesignSystem.Spacing.medium)
+        .padding(.vertical, DesignSystem.Spacing.small)
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: DesignSystem.Layout.smallCornerRadius)
                 .fill(Color.black.opacity(0.5))
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: DesignSystem.Layout.smallCornerRadius)
                 .stroke(Color.kardashevPrimary.opacity(0.3), lineWidth: 1)
         )
     }

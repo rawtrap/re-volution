@@ -137,19 +137,19 @@ struct RunStatsView: View {
             
             // Total score
             HStack {
-                Text("Score Totale")
-                    .font(.system(size: 16))
-                    .foregroundColor(.white)
-                    .lineLimit(1)
+                AdaptiveText(
+                    text: "Score Totale",
+                    style: DesignSystem.Typography.body,
+                    color: .white
+                )
                 
                 Spacer()
                 
-                Text((run.finalScore ?? run.currentScore).formatted())
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(.kardashevSuccess)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.6)
-                    .monospacedDigit()
+                AdaptiveText.numeric(
+                    (run.finalScore ?? run.currentScore).formatted(),
+                    style: Font.system(size: 24, weight: .bold),
+                    color: .kardashevSuccess
+                )
             }
             
             Divider()
@@ -182,24 +182,26 @@ struct RunStatsView: View {
     
     private func scoreBreakdownRow(label: String, value: BigNumber, total: BigNumber) -> some View {
         HStack {
-            Text(label)
-                .font(.system(size: 14))
-                .foregroundColor(.white.opacity(0.8))
-                .lineLimit(1)
+            AdaptiveText(
+                text: label,
+                style: DesignSystem.Typography.caption,
+                color: .white.opacity(0.8)
+            )
             
             Spacer()
             
-            Text(value.formatted())
-                .font(.system(size: 14, weight: .bold))
-                .foregroundColor(.white)
-                .lineLimit(1)
-                .monospacedDigit()
+            AdaptiveText.numeric(
+                value.formatted(),
+                style: DesignSystem.Typography.caption,
+                color: .white
+            )
             
             if total > BigNumber(0), let valueDouble = value.toDouble(), let totalDouble = total.toDouble() {
-                Text("(\(Int(valueDouble / totalDouble * 100))%)")
-                    .font(.system(size: 12))
-                    .foregroundColor(.gray)
-                    .lineLimit(1)
+                AdaptiveText(
+                    text: "(\(Int(valueDouble / totalDouble * 100))%)",
+                    style: DesignSystem.Typography.small,
+                    color: .gray
+                )
             }
         }
     }
@@ -279,19 +281,19 @@ struct RunStatsView: View {
             Text(icon)
                 .font(.system(size: 20))
             
-            Text(label)
-                .font(.system(size: 14))
-                .foregroundColor(.white)
-                .lineLimit(1)
+            AdaptiveText(
+                text: label,
+                style: DesignSystem.Typography.caption,
+                color: .white
+            )
             
             Spacer()
             
-            Text(value)
-                .font(.system(size: 14, weight: .bold))
-                .foregroundColor(.kardashevAccent)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-                .monospacedDigit()
+            AdaptiveText.numeric(
+                value,
+                style: DesignSystem.Typography.captionBold,
+                color: .kardashevAccent
+            )
         }
     }
     
