@@ -21,6 +21,10 @@ struct ResourceDisplayView: View {
                     Text(resource.formattedAmount())
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
+                        .lineLimit(1)
+                        .minimumScaleFactor(UIConstants.minimumScaleFactor)
+                        .allowsTightening(true)
+                        .monospacedDigit()
                         .onChange(of: resource.formattedAmount()) { newValue in
                             if !previousAmount.isEmpty && newValue != previousAmount {
                                 // Animazione quando cambia
@@ -32,12 +36,18 @@ struct ResourceDisplayView: View {
                         Text(resource.formattedProduction())
                             .font(.system(size: 12, weight: .medium, design: .rounded))
                             .foregroundColor(.kardashevSuccess)
+                            .lineLimit(1)
+                            .minimumScaleFactor(UIConstants.minimumScaleFactor)
+                            .allowsTightening(true)
+                            .monospacedDigit()
                     }
                 }
                 
                 Text(resource.type.rawValue)
                     .font(.system(size: 10, weight: .medium))
                     .foregroundColor(.gray)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
         }
         .padding(.horizontal, 12)

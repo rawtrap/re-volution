@@ -15,184 +15,188 @@ struct GameView: View {
     @State private var showEvolution = false
     
     var body: some View {
-        ZStack {
-            // SpriteKit Scene
-            SpriteView(scene: createScene())
-                .ignoresSafeArea()
-                .onTapGesture {
-                    gameManager.performClick()
-                }
-            
-            // UI Overlay
-            VStack {
-                // Top Bar - Risorse e Score
-                HStack {
-                    // Back to runs button
-                    if gameManager.currentRun != nil {
-                        Button(action: {
-                            gameManager.saveGame()
-                            RunManager.shared.currentRun = nil
-                        }) {
-                            HStack(spacing: 4) {
-                                Image(systemName: "chevron.left")
-                                    .font(.system(size: 16, weight: .bold))
-                                Text("RUNS")
-                                    .font(.system(size: 14, weight: .bold))
-                            }
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color.black.opacity(0.6))
-                            )
-                        }
+        GeometryReader { geometry in
+            ZStack {
+                // SpriteKit Scene
+                SpriteView(scene: createScene())
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        gameManager.performClick()
                     }
-                    
-                    Spacer()
-                    
-                    // Score display
-                    if let currentRun = gameManager.currentRun {
-                        VStack(alignment: .trailing, spacing: 2) {
-                            Text("SCORE")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundColor(.gray)
-                            Text("\(currentRun.currentScore)")
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(.kardashevAccent)
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.black.opacity(0.6))
-                        )
-                    }
-                    
-                    // All resources display
-                    HStack(spacing: 8) {
-                        ForEach([ResourceType.energy, .food, .materials, .knowledge, .population], id: \.self) { resourceType in
-                            if gameManager.gameState.isResourceUnlocked(resourceType) {
-                                ResourceDisplayView(resource: gameManager.gameState.resources[resourceType])
-                            }
-                        }
-                    }
-                    
-                    // Menu buttons
-                    HStack(spacing: 12) {
-                        Button(action: { showEvolution = true }) {
-                            Image(systemName: "brain.head.profile")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .frame(width: 44, height: 44)
-                                .background(Circle().fill(Color.black.opacity(0.6)))
-                        }
-                        
-                        Button(action: { showStats = true }) {
-                            Image(systemName: "chart.bar.fill")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .frame(width: 44, height: 44)
-                                .background(Circle().fill(Color.black.opacity(0.6)))
-                        }
-                        
-                        Button(action: { showShop = true }) {
-                            Image(systemName: "cart.fill")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .frame(width: 44, height: 44)
-                                .background(Circle().fill(Color.black.opacity(0.6)))
-                        }
-                    }
-                }
-                .padding()
                 
-                Spacer()
-                
-                // Resource selection buttons
-                VStack(spacing: 8) {
-                    Text("Click Genera:")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.gray)
-                    
-                    HStack(spacing: 12) {
-                        ForEach([ResourceType.energy, .food, .materials, .knowledge], id: \.self) { resourceType in
-                            if gameManager.gameState.isResourceUnlocked(resourceType) {
+                // UI Overlay con layout fisso
+                VStack(spacing: 0) {
+                    // Top Bar - Layout con posizioni fisse
+                    ZStack {
+                        // Back button - top left
+                        HStack {
+                            if gameManager.currentRun != nil {
                                 Button(action: {
-                                    gameManager.gameState.selectedClickResource = resourceType
+                                    gameManager.saveGame()
+                                    RunManager.shared.currentRun = nil
                                 }) {
-                                    VStack(spacing: 4) {
-                                        Text(resourceType.icon)
-                                            .font(.title2)
-                                        Text(resourceType.rawValue)
-                                            .font(.system(size: 10, weight: .medium))
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "chevron.left")
+                                            .font(.system(size: 16, weight: .bold))
+                                        Text("RUNS")
+                                            .font(.system(size: 14, weight: .bold))
                                     }
-                                    .foregroundColor(gameManager.gameState.selectedClickResource == resourceType ? .kardashevAccent : .white)
-                                    .frame(width: 60, height: 60)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 8)
                                     .background(
                                         RoundedRectangle(cornerRadius: 8)
                                             .fill(Color.black.opacity(0.6))
                                     )
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .stroke(gameManager.gameState.selectedClickResource == resourceType ? Color.kardashevAccent : Color.clear, lineWidth: 2)
-                                    )
+                                }
+                            }
+                            Spacer()
+                        }
+                        
+                        // Score - top center
+                        if let currentRun = gameManager.currentRun {
+                            ScoreBadgeView(score: currentRun.currentScore)
+                        }
+                        
+                        // Resources and menu buttons - top right
+                        HStack {
+                            Spacer()
+                            
+                            // All resources display
+                            HStack(spacing: 6) {
+                                ForEach([ResourceType.energy, .food, .materials, .knowledge, .population], id: \.self) { resourceType in
+                                    if gameManager.gameState.isResourceUnlocked(resourceType) {
+                                        ResourceTileView(resource: gameManager.gameState.resources[resourceType])
+                                    }
+                                }
+                            }
+                            
+                            // Menu buttons
+                            HStack(spacing: 8) {
+                                Button(action: { showEvolution = true }) {
+                                    Image(systemName: "brain.head.profile")
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                        .frame(width: UIConstants.menuButtonSize, height: UIConstants.menuButtonSize)
+                                        .background(Circle().fill(Color.black.opacity(0.6)))
+                                }
+                                
+                                Button(action: { showStats = true }) {
+                                    Image(systemName: "chart.bar.fill")
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                        .frame(width: UIConstants.menuButtonSize, height: UIConstants.menuButtonSize)
+                                        .background(Circle().fill(Color.black.opacity(0.6)))
+                                }
+                                
+                                Button(action: { showShop = true }) {
+                                    Image(systemName: "cart.fill")
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                        .frame(width: UIConstants.menuButtonSize, height: UIConstants.menuButtonSize)
+                                        .background(Circle().fill(Color.black.opacity(0.6)))
                                 }
                             }
                         }
                     }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.black.opacity(0.6))
-                )
-                .padding(.bottom, 8)
-                
-                // Stage info
-                VStack(spacing: 4) {
-                    Text(gameManager.gameState.civilization.stage.displayName)
-                        .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(.white)
+                    .padding()
+                    .frame(height: 100)
                     
-                    if gameManager.gameState.civilization.prestigeLevel > BigNumber(0) {
-                        Text("Prestige: \(gameManager.gameState.civilization.prestigeLevel) (\(gameManager.gameState.civilization.prestigeMultiplier, specifier: "%.2f")x)")
-                            .font(.system(size: 12))
-                            .foregroundColor(.kardashevAccent)
+                    Spacer()
+                
+                    // Resource selection buttons
+                    VStack(spacing: 8) {
+                        Text("Click Genera:")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(.gray)
+                            .lineLimit(1)
+                        
+                        HStack(spacing: 12) {
+                            ForEach([ResourceType.energy, .food, .materials, .knowledge], id: \.self) { resourceType in
+                                if gameManager.gameState.isResourceUnlocked(resourceType) {
+                                    Button(action: {
+                                        gameManager.gameState.selectedClickResource = resourceType
+                                    }) {
+                                        VStack(spacing: 4) {
+                                            Text(resourceType.icon)
+                                                .font(.title2)
+                                            Text(resourceType.rawValue)
+                                                .font(.system(size: 10, weight: .medium))
+                                                .lineLimit(1)
+                                                .minimumScaleFactor(0.7)
+                                        }
+                                        .foregroundColor(gameManager.gameState.selectedClickResource == resourceType ? .kardashevAccent : .white)
+                                        .frame(width: UIConstants.clickButtonWidth, height: UIConstants.clickButtonHeight)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: UIConstants.tileCornerRadius)
+                                                .fill(Color.black.opacity(0.6))
+                                        )
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: UIConstants.tileCornerRadius)
+                                                .stroke(gameManager.gameState.selectedClickResource == resourceType ? Color.kardashevAccent : Color.clear, lineWidth: 2)
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.black.opacity(0.6))
-                )
-                .padding(.bottom, 20)
-            }
-            
-            // Critical click feedback
-            if gameManager.showCriticalClick {
-                VStack {
-                    Text("💥 CRITICAL! x10 💥")
-                        .font(.system(size: 32, weight: .bold))
-                        .foregroundColor(.yellow)
-                        .shadow(color: .orange, radius: 10)
-                }
-                .transition(.scale.combined(with: .opacity))
-                .animation(.spring(), value: gameManager.showCriticalClick)
-            }
-            
-            // Offline reward popup
-            if gameManager.showOfflineReward, let reward = gameManager.offlineReward {
-                OfflineRewardView(
-                    reward: reward,
-                    onDismiss: {
-                        gameManager.dismissOfflineReward()
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.black.opacity(0.6))
+                    )
+                    .padding(.bottom, 8)
+                
+                    // Stage info
+                    VStack(spacing: 4) {
+                        Text(gameManager.gameState.civilization.stage.displayName)
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.white)
+                            .lineLimit(1)
+                        
+                        if gameManager.gameState.civilization.prestigeLevel > BigNumber(0) {
+                            Text("Prestige: \(gameManager.gameState.civilization.prestigeLevel.formatted()) (\(gameManager.gameState.civilization.prestigeMultiplier, specifier: "%.2f")x)")
+                                .font(.system(size: 12))
+                                .foregroundColor(.kardashevAccent)
+                                .lineLimit(1)
+                                .minimumScaleFactor(UIConstants.minimumScaleFactor)
+                        }
                     }
-                )
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.black.opacity(0.6))
+                    )
+                    .padding(.bottom, 20)
+                }
+            
+                // Critical click feedback
+                if gameManager.showCriticalClick {
+                    VStack {
+                        Text("💥 CRITICAL! x10 💥")
+                            .font(.system(size: 32, weight: .bold))
+                            .foregroundColor(.yellow)
+                            .shadow(color: .orange, radius: 10)
+                    }
+                    .transition(.scale.combined(with: .opacity))
+                    .animation(.spring(), value: gameManager.showCriticalClick)
+                }
+                
+                // Offline reward popup
+                if gameManager.showOfflineReward, let reward = gameManager.offlineReward {
+                    OfflineRewardView(
+                        reward: reward,
+                        onDismiss: {
+                            gameManager.dismissOfflineReward()
+                        }
+                    )
+                }
             }
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
+        .ignoresSafeArea()
         .sheet(isPresented: $showShop) {
             ShopView()
         }
