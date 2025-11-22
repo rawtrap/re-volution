@@ -65,6 +65,16 @@ struct BigNumber: Codable, Equatable {
             return "0"
         }
         
+        // Per numeri molto piccoli (< 1), usa il valore Double diretto
+        if exponent < 0 {
+            if let doubleValue = toDouble() {
+                if abs(doubleValue) < 0.001 {
+                    return String(format: "%.3e", doubleValue)
+                }
+                return String(format: "%.3f", doubleValue)
+            }
+        }
+        
         // Suffissi standard per numeri grandi (ogni 3 ordini di grandezza)
         let suffixes = ["", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc", "Ud", "Dd", 
                        "Td", "Qad", "Qid", "Sxd", "Spd", "Ocd", "Nod", "Vg", "Uvg", "Dvg", "Tvg",
