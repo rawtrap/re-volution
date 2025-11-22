@@ -152,10 +152,14 @@ struct RunCardView: View {
             Text(value)
                 .font(.system(size: 14, weight: .bold))
                 .foregroundColor(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .monospacedDigit()
             
             Text(label)
                 .font(.system(size: 10))
                 .foregroundColor(.white.opacity(0.7))
+                .lineLimit(1)
         }
         .frame(maxWidth: .infinity)
     }

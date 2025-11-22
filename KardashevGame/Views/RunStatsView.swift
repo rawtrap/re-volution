@@ -140,12 +140,16 @@ struct RunStatsView: View {
                 Text("Score Totale")
                     .font(.system(size: 16))
                     .foregroundColor(.white)
+                    .lineLimit(1)
                 
                 Spacer()
                 
                 Text((run.finalScore ?? run.currentScore).formatted())
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(.kardashevSuccess)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                    .monospacedDigit()
             }
             
             Divider()
@@ -181,17 +185,21 @@ struct RunStatsView: View {
             Text(label)
                 .font(.system(size: 14))
                 .foregroundColor(.white.opacity(0.8))
+                .lineLimit(1)
             
             Spacer()
             
             Text(value.formatted())
                 .font(.system(size: 14, weight: .bold))
                 .foregroundColor(.white)
+                .lineLimit(1)
+                .monospacedDigit()
             
             if total > BigNumber(0), let valueDouble = value.toDouble(), let totalDouble = total.toDouble() {
                 Text("(\(Int(valueDouble / totalDouble * 100))%)")
                     .font(.system(size: 12))
                     .foregroundColor(.gray)
+                    .lineLimit(1)
             }
         }
     }
@@ -274,12 +282,16 @@ struct RunStatsView: View {
             Text(label)
                 .font(.system(size: 14))
                 .foregroundColor(.white)
+                .lineLimit(1)
             
             Spacer()
             
             Text(value)
                 .font(.system(size: 14, weight: .bold))
                 .foregroundColor(.kardashevAccent)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .monospacedDigit()
         }
     }
     
