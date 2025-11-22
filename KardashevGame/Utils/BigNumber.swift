@@ -33,7 +33,7 @@ struct BigNumber: Codable, Equatable {
     
     /// Normalizza il numero in modo che mantissa sia tra 1 e 10
     private mutating func normalize() {
-        if mantissa == 0 {
+        guard mantissa != 0 else {
             exponent = 0
             return
         }
@@ -41,21 +41,22 @@ struct BigNumber: Codable, Equatable {
         let sign = mantissa < 0 ? -1.0 : 1.0
         var absM = abs(mantissa)
         
-        // Gestisce mantissa >= 10
-        while absM >= 10.0 {
-            absM /= 10.0
-            exponent += 1
+        // Normalizzazione più robusta per valori molto grandi
+        if absM >= 10.0 {
+            let exp = Int(log10(absM))
+            absM /= pow(10.0, Double(exp))
+            exponent += exp
         }
         
-        // Gestisce mantissa < 1
-        while absM < 1.0 && absM > 0 {
+        // Normalizzazione per valori molto piccoli
+        while absM < 1.0 && absM > 1e-10 {
             absM *= 10.0
             exponent -= 1
         }
         
-        // Gestisce casi limite di precisione floating point
-        if absM >= 10.0 {
-            absM /= 10.0
+        // Prevenire floating point errors vicino a 10
+        if absM >= 10.0 - 1e-10 {
+            absM = 1.0
             exponent += 1
         }
         
@@ -171,24 +172,35 @@ struct BigNumber: Codable, Equatable {
     }
     
     static func < (lhs: BigNumber, rhs: BigNumber) -> Bool {
-        if lhs.exponent != rhs.exponent {
-            return lhs.exponent < rhs.exponent
-        }
-        return lhs.mantissa < rhs.mantissa
+        return compare(lhs, rhs) == .orderedAscending
     }
     
     static func > (lhs: BigNumber, rhs: BigNumber) -> Bool {
-        if lhs.exponent != rhs.exponent {
-            return lhs.exponent > rhs.exponent
-        }
-        return lhs.mantissa > rhs.mantissa
+        return compare(lhs, rhs) == .orderedDescending
     }
     
     static func >= (lhs: BigNumber, rhs: BigNumber) -> Bool {
-        return lhs > rhs || lhs == rhs
+        let result = compare(lhs, rhs)
+        return result == .orderedDescending || result == .orderedSame
     }
     
     static func <= (lhs: BigNumber, rhs: BigNumber) -> Bool {
-        return lhs < rhs || lhs == rhs
+        let result = compare(lhs, rhs)
+        return result == .orderedAscending || result == .orderedSame
+    }
+    
+    /// Operatore di comparazione più robusto con tolleranza per floating point errors
+    static func compare(_ lhs: BigNumber, _ rhs: BigNumber) -> ComparisonResult {
+        // Confronta esponenti
+        if lhs.exponent != rhs.exponent {
+            return lhs.exponent > rhs.exponent ? .orderedDescending : .orderedAscending
+        }
+        
+        // Stesso esponente, confronta mantisse con tolleranza
+        let diff = lhs.mantissa - rhs.mantissa
+        if abs(diff) < 1e-10 { 
+            return .orderedSame 
+        }
+        return diff > 0 ? .orderedDescending : .orderedAscending
     }
 }

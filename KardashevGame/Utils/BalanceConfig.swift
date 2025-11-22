@@ -51,28 +51,43 @@ struct BalanceConfig {
     // MARK: - Auto-save
     static let autoSaveIntervalSeconds = 30.0
     
-    /// Calcola il costo di un edificio al livello specificato
+    /// Calcola il costo di un edificio al livello specificato con protezione overflow
     static func buildingCost(baseCost: Double, level: BigNumber, multiplier: Double) -> BigNumber {
-        // Usa la formula: baseCost * (multiplier ^ level)
-        // Per evitare overflow, usiamo logaritmi: log(cost) = log(baseCost) + level * log(multiplier)
+        // Gestione caso base
+        guard level > BigNumber(0) else { 
+            return BigNumber(baseCost) 
+        }
         
-        // Calcola il livello come double se possibile, altrimenti usa approssimazione
+        // Per livelli bassi usa calcolo diretto per maggiore precisione
+        if let levelDouble = level.toDouble(), levelDouble < 100 {
+            let cost = baseCost * pow(multiplier, levelDouble)
+            return BigNumber(cost)
+        }
+        
+        // Per livelli alti usa logaritmi con protezione overflow
+        let logBaseCost = log10(baseCost)
+        let logMultiplier = log10(multiplier)
+        
+        // Calcola il valore del livello in modo sicuro
         let levelValue: Double
-        if let levelDouble = level.toDouble() {
-            levelValue = levelDouble
+        if let ld = level.toDouble() {
+            levelValue = ld
         } else {
-            // Per livelli enormi, usa mantissa * 10^exponent
+            // Approssimazione per livelli enormi
             levelValue = level.mantissa * pow(10.0, Double(level.exponent))
         }
         
-        // Usa logaritmi per calcolare in modo sicuro
-        let logBaseCost = log10(baseCost)
-        let logMultiplier = log10(multiplier)
         let logCost = logBaseCost + levelValue * logMultiplier
+        
+        // Protezione overflow - limita a valori rappresentabili
+        if logCost > 308 {
+            return BigNumber(mantissa: 9.99, exponent: 308)
+        }
         
         // Converti back da logaritmo a BigNumber
         let exponent = Int(floor(logCost))
         let mantissa = pow(10.0, logCost - Double(exponent))
+        
         return BigNumber(mantissa: mantissa, exponent: exponent)
     }
     

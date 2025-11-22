@@ -15,7 +15,11 @@ struct GameView: View {
     @State private var showEvolution = false
     
     var body: some View {
+        // Ottimizzato: usa GeometryReader solo per safe area, non per size
         GeometryReader { geometry in
+            let safeTop = geometry.safeAreaInsets.top
+            let safeBottom = geometry.safeAreaInsets.bottom
+            
             ZStack {
                 // SpriteKit Scene - ignora safe area
                 SpriteView(scene: createScene())
@@ -27,7 +31,7 @@ struct GameView: View {
                 // UI Overlay con layout fisso - rispetta safe area
                 VStack(spacing: 0) {
                     // Top Bar - posizionato sotto safe area
-                    HStack(alignment: .top, spacing: 12) {
+                    HStack(alignment: .top, spacing: DesignSystem.Spacing.medium) {
                         // Back button - top left
                         if gameManager.currentRun != nil {
                             Button(action: {
@@ -96,9 +100,9 @@ struct GameView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.top, geometry.safeAreaInsets.top + 8)
-                    .padding(.bottom, 8)
+                    .padding(.horizontal, DesignSystem.Spacing.medium)
+                    .padding(.top, safeTop + DesignSystem.Spacing.small)
+                    .padding(.bottom, DesignSystem.Spacing.small)
                     .frame(maxWidth: .infinity)
                     
                     Spacer()
@@ -180,7 +184,7 @@ struct GameView: View {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(Color.black.opacity(0.6))
                     )
-                    .padding(.bottom, max(geometry.safeAreaInsets.bottom, 20))
+                    .padding(.bottom, max(safeBottom, 20))
                 }
                 .allowsHitTesting(true)
                 .zIndex(1000)

@@ -261,27 +261,31 @@ struct ShopItemCardView: View {
             
             // Info
             VStack(alignment: .leading, spacing: 4) {
-                Text(item.type.rawValue)
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundColor(.white)
+                AdaptiveText(
+                    text: item.type.rawValue,
+                    style: DesignSystem.Typography.bodyBold,
+                    color: .white
+                )
                 
-                Text(item.type.description)
-                    .font(.system(size: 12))
-                    .foregroundColor(.gray)
-                    .lineLimit(2)
+                AdaptiveText.multiline(
+                    item.type.description,
+                    maxLines: 2,
+                    color: .gray
+                )
                 
                 HStack(spacing: 8) {
-                    Text("Livello: \(item.level.formatted())")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.kardashevAccent)
-                        .lineLimit(1)
-                        .monospacedDigit()
+                    AdaptiveText.numeric(
+                        "Livello: \(item.level.formatted())",
+                        style: DesignSystem.Typography.caption,
+                        color: .kardashevAccent
+                    )
                     
                     if item.level > BigNumber(0) {
-                        Text("• Effetto: \(item.currentEffect(), specifier: "%.1f")")
-                            .font(.system(size: 12))
-                            .foregroundColor(.kardashevSuccess)
-                            .lineLimit(1)
+                        AdaptiveText(
+                            text: "• Effetto: \(item.currentEffect(), specifier: "%.1f")",
+                            style: DesignSystem.Typography.caption,
+                            color: .kardashevSuccess
+                        )
                     }
                 }
             }
@@ -306,12 +310,11 @@ struct ShopItemCardView: View {
                 HStack(spacing: 4) {
                     Text(item.type.requiresResource.icon)
                         .font(.caption)
-                    Text(item.nextLevelCost().formatted())
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundColor(canAfford ? .white : .red)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                        .monospacedDigit()
+                    AdaptiveText.numeric(
+                        item.nextLevelCost().formatted(),
+                        style: DesignSystem.Typography.small,
+                        color: canAfford ? .white : .red
+                    )
                 }
             }
         }

@@ -145,21 +145,21 @@ struct RunCardView: View {
     }
     
     private func statItem(icon: String, label: String, value: String) -> some View {
-        VStack(spacing: 4) {
+        VStack(spacing: DesignSystem.Spacing.tiny) {
             Text(icon)
                 .font(.system(size: 20))
             
-            Text(value)
-                .font(.system(size: 14, weight: .bold))
-                .foregroundColor(.white)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-                .monospacedDigit()
+            AdaptiveText.numeric(
+                value,
+                style: DesignSystem.Typography.captionBold,
+                color: .white
+            )
             
-            Text(label)
-                .font(.system(size: 10))
-                .foregroundColor(.white.opacity(0.7))
-                .lineLimit(1)
+            AdaptiveText(
+                text: label,
+                style: DesignSystem.Typography.small,
+                color: .white.opacity(0.7)
+            )
         }
         .frame(maxWidth: .infinity)
     }

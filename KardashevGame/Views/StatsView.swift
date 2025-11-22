@@ -80,24 +80,26 @@ struct StatsView: View {
                                             .font(.title2)
                                         
                                         VStack(alignment: .leading) {
-                                            Text(building.type.rawValue)
-                                                .font(.system(size: 14, weight: .semibold))
-                                                .foregroundColor(.white)
+                                            AdaptiveText(
+                                                text: building.type.rawValue,
+                                                style: DesignSystem.Typography.caption,
+                                                color: .white
+                                            )
                                             
-                                            Text("Livello \(building.level.formatted())")
-                                                .font(.system(size: 12))
-                                                .foregroundColor(.gray)
-                                                .lineLimit(1)
-                                                .monospacedDigit()
+                                            AdaptiveText.numeric(
+                                                "Livello \(building.level.formatted())",
+                                                style: DesignSystem.Typography.small,
+                                                color: .gray
+                                            )
                                         }
                                         
                                         Spacer()
                                         
-                                        Text("+\(building.totalProduction().formatted())/s")
-                                            .font(.system(size: 12, weight: .medium))
-                                            .foregroundColor(.kardashevSuccess)
-                                            .lineLimit(1)
-                                            .monospacedDigit()
+                                        AdaptiveText.numeric(
+                                            "+\(building.totalProduction().formatted())/s",
+                                            style: DesignSystem.Typography.caption,
+                                            color: .kardashevSuccess
+                                        )
                                     }
                                     .padding()
                                     .cardStyle()
@@ -152,13 +154,17 @@ struct StatCard: View {
                 .font(.system(size: 40))
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.system(size: 12))
-                    .foregroundColor(.gray)
+                AdaptiveText(
+                    text: title,
+                    style: DesignSystem.Typography.caption,
+                    color: .gray
+                )
                 
-                Text(value)
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(.white)
+                AdaptiveText.numeric(
+                    value,
+                    style: DesignSystem.Typography.subheadline,
+                    color: .white
+                )
             }
             
             Spacer()

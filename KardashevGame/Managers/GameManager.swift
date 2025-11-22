@@ -24,6 +24,9 @@ class GameManager: ObservableObject {
     private var lastUpdateTime: Date = Date()
     private var sessionStartTime: Date = Date()
     
+    // Queue per serializzare operazioni sullo stato
+    private let stateQueue = DispatchQueue(label: "com.kardashev.gamestate", qos: .userInteractive)
+    
     var currentRun: Run? {
         return RunManager.shared.currentRun
     }
