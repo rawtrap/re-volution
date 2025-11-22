@@ -58,38 +58,7 @@ struct BigNumber: Codable, Equatable {
         return mantissa * pow(10.0, Double(exponent))
     }
     
-    /// Formatta il numero per display con suffissi (K, M, B, T, etc)
-    func formatted() -> String {
-        if mantissa == 0 {
-            return "0"
-        }
-        
-        // Suffissi standard per numeri grandi
-        let suffixes = ["", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc"]
-        
-        let suffixIndex = exponent / 3
-        let displayExponent = exponent % 3
-        let displayMantissa = mantissa * pow(10.0, Double(displayExponent))
-        
-        if suffixIndex < suffixes.count {
-            if suffixIndex == 0 && exponent < 3 {
-                // Numeri sotto 1000 - mostra con precisione appropriata
-                let value = toDouble() ?? 0
-                if value < 10 {
-                    return String(format: "%.2f", value)
-                } else if value < 100 {
-                    return String(format: "%.1f", value)
-                } else {
-                    return String(format: "%.0f", value)
-                }
-            }
-            // Numeri con suffisso - limita a 2 decimali
-            return String(format: "%.2f%@", displayMantissa, suffixes[suffixIndex])
-        } else {
-            // Per numeri estremamente grandi usa notazione scientifica
-            return String(format: "%.2fe%d", mantissa, exponent)
-        }
-    }
+
     
     // MARK: - Operazioni
     
