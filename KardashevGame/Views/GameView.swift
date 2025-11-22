@@ -71,7 +71,7 @@ struct GameView: View {
                                 }
                             }
                         }
-                        .frame(maxWidth: 400) // Limita larghezza massima
+                        .frame(maxWidth: 450) // Limita larghezza massima
                         
                         // Menu buttons
                         HStack(spacing: 8) {
@@ -101,7 +101,7 @@ struct GameView: View {
                         }
                     }
                     .padding(.horizontal, DesignSystem.Spacing.medium)
-                    .padding(.top, safeTop + DesignSystem.Spacing.small)
+                    .padding(.top, max(safeTop, 20) + 12)
                     .padding(.bottom, DesignSystem.Spacing.small)
                     .frame(maxWidth: .infinity)
                     
@@ -184,7 +184,7 @@ struct GameView: View {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(Color.black.opacity(0.6))
                     )
-                    .padding(.bottom, max(safeBottom, 20))
+                    .padding(.bottom, max(safeBottom, 20) + 12)
                 }
                 .allowsHitTesting(true)
                 .zIndex(1000)

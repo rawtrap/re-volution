@@ -52,6 +52,15 @@
 		3840BCCA2ED219A00052CDDF /* GameEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840BCC82ED219A00052CDDF /* GameEvent.swift */; };
 		3840BCCB2ED219A00052CDDF /* ShopItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840BCC92ED219A00052CDDF /* ShopItem.swift */; };
 		3840BCCC2ED219A00052CDDF /* EvolutionPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840BCC72ED219A00052CDDF /* EvolutionPath.swift */; };
+		385A5AFC2ED22237000ED455 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A5AFB2ED22237000ED455 /* UIConstants.swift */; };
+		385A5AFF2ED22241000ED455 /* ResourceTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A5AFD2ED22241000ED455 /* ResourceTileView.swift */; };
+		385A5B002ED22241000ED455 /* ScoreBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A5AFE2ED22241000ED455 /* ScoreBadgeView.swift */; };
+		385A5B042ED22BE1000ED455 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A5B012ED22BE1000ED455 /* CacheManager.swift */; };
+		385A5B052ED22BE1000ED455 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A5B022ED22BE1000ED455 /* DesignSystem.swift */; };
+		385A5B062ED22BE1000ED455 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A5B032ED22BE1000ED455 /* Logger.swift */; };
+		385A5B082ED22BFB000ED455 /* RunStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A5B072ED22BFB000ED455 /* RunStatsView.swift */; };
+		385A5B0B2ED22C98000ED455 /* AdaptiveText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A5B092ED22C98000ED455 /* AdaptiveText.swift */; };
+		385A5B0C2ED22C98000ED455 /* SafeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A5B0A2ED22C98000ED455 /* SafeCardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +111,15 @@
 		3840BCC72ED219A00052CDDF /* EvolutionPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionPath.swift; sourceTree = "<group>"; };
 		3840BCC82ED219A00052CDDF /* GameEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEvent.swift; sourceTree = "<group>"; };
 		3840BCC92ED219A00052CDDF /* ShopItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopItem.swift; sourceTree = "<group>"; };
+		385A5AFB2ED22237000ED455 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
+		385A5AFD2ED22241000ED455 /* ResourceTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceTileView.swift; sourceTree = "<group>"; };
+		385A5AFE2ED22241000ED455 /* ScoreBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreBadgeView.swift; sourceTree = "<group>"; };
+		385A5B012ED22BE1000ED455 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
+		385A5B022ED22BE1000ED455 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		385A5B032ED22BE1000ED455 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		385A5B072ED22BFB000ED455 /* RunStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunStatsView.swift; sourceTree = "<group>"; };
+		385A5B092ED22C98000ED455 /* AdaptiveText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveText.swift; sourceTree = "<group>"; };
+		385A5B0A2ED22C98000ED455 /* SafeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +167,7 @@
 		5000000000000004 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				385A5B072ED22BFB000ED455 /* RunStatsView.swift */,
 				3840BCBF2ED2197C0052CDDF /* EventView.swift */,
 				3840BCC02ED2197C0052CDDF /* EvolutionView.swift */,
 				3840BCC12ED2197C0052CDDF /* GameOverView.swift */,
@@ -211,6 +230,10 @@
 		5000000000000008 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				385A5B012ED22BE1000ED455 /* CacheManager.swift */,
+				385A5B022ED22BE1000ED455 /* DesignSystem.swift */,
+				385A5B032ED22BE1000ED455 /* Logger.swift */,
+				385A5AFB2ED22237000ED455 /* UIConstants.swift */,
 				382F43562EC0A199000B9A42 /* PlanetGenerator.swift */,
 				382F43572EC0A199000B9A42 /* SeededRandomNumberGenerator.swift */,
 				2000000000000025 /* BigNumber.swift */,
@@ -232,6 +255,10 @@
 		5000000000000010 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				385A5B092ED22C98000ED455 /* AdaptiveText.swift */,
+				385A5B0A2ED22C98000ED455 /* SafeCardView.swift */,
+				385A5AFD2ED22241000ED455 /* ResourceTileView.swift */,
+				385A5AFE2ED22241000ED455 /* ScoreBadgeView.swift */,
 				382F43522EC0A17A000B9A42 /* RunCardView.swift */,
 				2000000000000007 /* ResourceDisplayView.swift */,
 				2000000000000008 /* BuildingCardView.swift */,
@@ -311,6 +338,7 @@
 			files = (
 				1000000000000001 /* KardashevGameApp.swift in Sources */,
 				1000000000000002 /* ContentView.swift in Sources */,
+				385A5AFC2ED22237000ED455 /* UIConstants.swift in Sources */,
 				1000000000000003 /* MainMenuView.swift in Sources */,
 				1000000000000004 /* GameView.swift in Sources */,
 				1000000000000005 /* ShopView.swift in Sources */,
@@ -339,10 +367,18 @@
 				1000000000000018 /* OfflineProgressManager.swift in Sources */,
 				1000000000000019 /* Civilization.swift in Sources */,
 				1000000000000020 /* Resource.swift in Sources */,
+				385A5B042ED22BE1000ED455 /* CacheManager.swift in Sources */,
+				385A5B052ED22BE1000ED455 /* DesignSystem.swift in Sources */,
+				385A5B062ED22BE1000ED455 /* Logger.swift in Sources */,
+				385A5AFF2ED22241000ED455 /* ResourceTileView.swift in Sources */,
+				385A5B002ED22241000ED455 /* ScoreBadgeView.swift in Sources */,
 				1000000000000021 /* Building.swift in Sources */,
 				1000000000000022 /* Technology.swift in Sources */,
 				1000000000000023 /* KardashevStage.swift in Sources */,
+				385A5B082ED22BFB000ED455 /* RunStatsView.swift in Sources */,
 				382F43582EC0A199000B9A42 /* PlanetGenerator.swift in Sources */,
+				385A5B0B2ED22C98000ED455 /* AdaptiveText.swift in Sources */,
+				385A5B0C2ED22C98000ED455 /* SafeCardView.swift in Sources */,
 				382F43592EC0A199000B9A42 /* SeededRandomNumberGenerator.swift in Sources */,
 				1000000000000024 /* GameState.swift in Sources */,
 				382F434F2EC0A164000B9A42 /* NewRunView.swift in Sources */,

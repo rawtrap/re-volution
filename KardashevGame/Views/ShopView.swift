@@ -282,7 +282,7 @@ struct ShopItemCardView: View {
                     
                     if item.level > BigNumber(0) {
                         AdaptiveText(
-                            text: "• Effetto: \(item.currentEffect(), specifier: "%.1f")",
+                            text: "• Effetto: \(item.currentEffect(), default: "%.1f")",
                             style: DesignSystem.Typography.caption,
                             color: .kardashevSuccess
                         )
