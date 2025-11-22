@@ -17,52 +17,48 @@ struct GameView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // SpriteKit Scene
+                // SpriteKit Scene - ignora safe area
                 SpriteView(scene: createScene())
                     .ignoresSafeArea()
                     .onTapGesture {
                         gameManager.performClick()
                     }
                 
-                // UI Overlay con layout fisso
+                // UI Overlay con layout fisso - rispetta safe area
                 VStack(spacing: 0) {
-                    // Top Bar - Layout con posizioni fisse
-                    ZStack {
+                    // Top Bar - posizionato sotto safe area
+                    HStack(alignment: .top, spacing: 12) {
                         // Back button - top left
-                        HStack {
-                            if gameManager.currentRun != nil {
-                                Button(action: {
-                                    gameManager.saveGame()
-                                    RunManager.shared.currentRun = nil
-                                }) {
-                                    HStack(spacing: 4) {
-                                        Image(systemName: "chevron.left")
-                                            .font(.system(size: 16, weight: .bold))
-                                        Text("RUNS")
-                                            .font(.system(size: 14, weight: .bold))
-                                    }
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 8)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(Color.black.opacity(0.6))
-                                    )
+                        if gameManager.currentRun != nil {
+                            Button(action: {
+                                gameManager.saveGame()
+                                RunManager.shared.currentRun = nil
+                            }) {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "chevron.left")
+                                        .font(.system(size: 16, weight: .bold))
+                                    Text("RUNS")
+                                        .font(.system(size: 14, weight: .bold))
                                 }
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color.black.opacity(0.6))
+                                )
                             }
-                            Spacer()
                         }
                         
-                        // Score - top center
+                        // Score - center-left
                         if let currentRun = gameManager.currentRun {
                             ScoreBadgeView(score: currentRun.currentScore)
                         }
                         
-                        // Resources and menu buttons - top right
-                        HStack {
-                            Spacer()
-                            
-                            // All resources display
+                        Spacer(minLength: 0)
+                        
+                        // Resources display - scrollable orizzontalmente
+                        ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 6) {
                                 ForEach([ResourceType.energy, .food, .materials, .knowledge, .population], id: \.self) { resourceType in
                                     if gameManager.gameState.isResourceUnlocked(resourceType) {
@@ -70,37 +66,40 @@ struct GameView: View {
                                     }
                                 }
                             }
+                        }
+                        .frame(maxWidth: 400) // Limita larghezza massima
+                        
+                        // Menu buttons
+                        HStack(spacing: 8) {
+                            Button(action: { showEvolution = true }) {
+                                Image(systemName: "brain.head.profile")
+                                    .font(.title2)
+                                    .foregroundColor(.white)
+                                    .frame(width: UIConstants.menuButtonSize, height: UIConstants.menuButtonSize)
+                                    .background(Circle().fill(Color.black.opacity(0.6)))
+                            }
                             
-                            // Menu buttons
-                            HStack(spacing: 8) {
-                                Button(action: { showEvolution = true }) {
-                                    Image(systemName: "brain.head.profile")
-                                        .font(.title2)
-                                        .foregroundColor(.white)
-                                        .frame(width: UIConstants.menuButtonSize, height: UIConstants.menuButtonSize)
-                                        .background(Circle().fill(Color.black.opacity(0.6)))
-                                }
-                                
-                                Button(action: { showStats = true }) {
-                                    Image(systemName: "chart.bar.fill")
-                                        .font(.title2)
-                                        .foregroundColor(.white)
-                                        .frame(width: UIConstants.menuButtonSize, height: UIConstants.menuButtonSize)
-                                        .background(Circle().fill(Color.black.opacity(0.6)))
-                                }
-                                
-                                Button(action: { showShop = true }) {
-                                    Image(systemName: "cart.fill")
-                                        .font(.title2)
-                                        .foregroundColor(.white)
-                                        .frame(width: UIConstants.menuButtonSize, height: UIConstants.menuButtonSize)
-                                        .background(Circle().fill(Color.black.opacity(0.6)))
-                                }
+                            Button(action: { showStats = true }) {
+                                Image(systemName: "chart.bar.fill")
+                                    .font(.title2)
+                                    .foregroundColor(.white)
+                                    .frame(width: UIConstants.menuButtonSize, height: UIConstants.menuButtonSize)
+                                    .background(Circle().fill(Color.black.opacity(0.6)))
+                            }
+                            
+                            Button(action: { showShop = true }) {
+                                Image(systemName: "cart.fill")
+                                    .font(.title2)
+                                    .foregroundColor(.white)
+                                    .frame(width: UIConstants.menuButtonSize, height: UIConstants.menuButtonSize)
+                                    .background(Circle().fill(Color.black.opacity(0.6)))
                             }
                         }
                     }
-                    .padding()
-                    .frame(height: 100)
+                    .padding(.horizontal, 12)
+                    .padding(.top, geometry.safeAreaInsets.top + 8)
+                    .padding(.bottom, 8)
+                    .frame(maxWidth: .infinity)
                     
                     Spacer()
                 
@@ -124,6 +123,7 @@ struct GameView: View {
                                                 .font(.system(size: 10, weight: .medium))
                                                 .lineLimit(1)
                                                 .minimumScaleFactor(0.7)
+                                                .monospacedDigit()
                                         }
                                         .foregroundColor(gameManager.gameState.selectedClickResource == resourceType ? .kardashevAccent : .white)
                                         .frame(width: UIConstants.clickButtonWidth, height: UIConstants.clickButtonHeight)
@@ -154,6 +154,7 @@ struct GameView: View {
                             .font(.system(size: 14, weight: .bold))
                             .foregroundColor(.white)
                             .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                         
                         if gameManager.gameState.civilization.prestigeLevel > BigNumber(0) {
                             HStack(spacing: 4) {
@@ -163,6 +164,7 @@ struct GameView: View {
                                 Text(gameManager.gameState.civilization.prestigeLevel.formatted())
                                     .font(.system(size: 12, weight: .bold))
                                     .foregroundColor(.kardashevAccent)
+                                    .lineLimit(1)
                                     .monospacedDigit()
                                 Text("(\(gameManager.gameState.civilization.prestigeMultiplier, specifier: "%.2f")x)")
                                     .font(.system(size: 12))
@@ -178,8 +180,10 @@ struct GameView: View {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(Color.black.opacity(0.6))
                     )
-                    .padding(.bottom, 20)
+                    .padding(.bottom, max(geometry.safeAreaInsets.bottom, 20))
                 }
+                .allowsHitTesting(true)
+                .zIndex(1000)
             
                 // Critical click feedback
                 if gameManager.showCriticalClick {
@@ -189,6 +193,7 @@ struct GameView: View {
                             .foregroundColor(.yellow)
                             .shadow(color: .orange, radius: 10)
                     }
+                    .zIndex(2000)
                     .transition(.scale.combined(with: .opacity))
                     .animation(.spring(), value: gameManager.showCriticalClick)
                 }
@@ -201,6 +206,7 @@ struct GameView: View {
                             gameManager.dismissOfflineReward()
                         }
                     )
+                    .zIndex(3000)
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -282,6 +288,9 @@ struct OfflineRewardView: View {
                         Text(reward.energyGained.formatted())
                             .font(.system(size: 28, weight: .bold))
                             .foregroundColor(.kardashevSuccess)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                            .monospacedDigit()
                     }
                     
                     Text("Energia")
