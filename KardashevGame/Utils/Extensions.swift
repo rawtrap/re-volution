@@ -26,15 +26,15 @@ extension View {
             .shadow(color: color.opacity(0.4), radius: radius / 2, x: 0, y: 0)
     }
     
-    /// Applica stile card standard
+    /// Applica stile card standard usando DesignSystem
     func cardStyle() -> some View {
         self
             .background(
-                RoundedRectangle(cornerRadius: Constants.cornerRadius)
-                    .fill(Color.black.opacity(0.6))
+                RoundedRectangle(cornerRadius: DesignSystem.Layout.cardCornerRadius)
+                    .fill(Color.black.opacity(0.4))
             )
             .overlay(
-                RoundedRectangle(cornerRadius: Constants.cornerRadius)
+                RoundedRectangle(cornerRadius: DesignSystem.Layout.cardCornerRadius)
                     .stroke(Color.kardashevPrimary.opacity(0.3), lineWidth: 1)
             )
     }

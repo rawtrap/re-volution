@@ -147,7 +147,7 @@ struct RunStatsView: View {
                 
                 AdaptiveText.numeric(
                     (run.finalScore ?? run.currentScore).formatted(),
-                    style: Font.system(size: 24, weight: .bold),
+                    style: DesignSystem.Typography.emphasizedBody,
                     color: .kardashevSuccess
                 )
             }

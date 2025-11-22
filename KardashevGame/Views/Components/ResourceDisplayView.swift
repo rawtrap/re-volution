@@ -10,7 +10,6 @@ import SwiftUI
 struct ResourceDisplayView: View {
     let resource: Resource
     @State private var previousAmount: String = ""
-    @State private var isIncreasing: Bool = false
     
     var body: some View {
         HStack(spacing: DesignSystem.Spacing.small) {
@@ -25,13 +24,12 @@ struct ResourceDisplayView: View {
                         color: .white
                     )
                     .onChange(of: resource.formattedAmount()) { newValue in
-                        withAnimation(DesignSystem.Animation.quick) {
-                            if !previousAmount.isEmpty && newValue != previousAmount {
-                                isIncreasing = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    isIncreasing = false
-                                }
+                        // Smooth update tracking for potential future animations
+                        if !previousAmount.isEmpty && newValue != previousAmount {
+                            withAnimation(DesignSystem.Animation.quick) {
+                                previousAmount = newValue
                             }
+                        } else {
                             previousAmount = newValue
                         }
                     }

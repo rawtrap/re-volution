@@ -68,13 +68,13 @@ class ResourceManager {
     /// Acquista un edificio con validazione transazione
     func purchaseBuilding(type: BuildingType, gameState: GameState) -> Bool {
         guard var building = gameState.buildings[type] else {
-            print("❌ Building \(type.rawValue) non trovato")
+            Logger.error("Building \(type.rawValue) non trovato")
             return false
         }
         
         // Verifica se è sbloccato
         if !building.unlocked {
-            print("❌ Building \(type.rawValue) non sbloccato")
+            Logger.warning("Building \(type.rawValue) non sbloccato")
             return false
         }
         
@@ -82,13 +82,13 @@ class ResourceManager {
         
         // Validazione: verifica che il costo sia positivo e valido
         guard cost > BigNumber(0) else {
-            print("❌ Costo invalido per \(type.rawValue)")
+            Logger.error("Costo invalido per \(type.rawValue)")
             return false
         }
         
         // Verifica se può permetterselo
         guard gameState.resources.energy.canAfford(cost) else {
-            print("❌ Energia insufficiente per \(type.rawValue). Costo: \(cost.formatted()), Disponibile: \(gameState.resources.energy.amount.formatted())")
+            Logger.debug("Energia insufficiente per \(type.rawValue). Costo: \(cost.formatted()), Disponibile: \(gameState.resources.energy.amount.formatted())")
             return false
         }
         
@@ -100,7 +100,7 @@ class ResourceManager {
         
         // Validazione post-sottrazione: verifica che non sia diventato negativo
         if gameState.resources.energy.amount < BigNumber(0) {
-            print("⚠️ Errore: risorsa negativa dopo acquisto, rollback")
+            Logger.error("Risorsa negativa dopo acquisto, rollback")
             gameState.resources.energy.amount = previousAmount
             return false
         }
@@ -109,7 +109,13 @@ class ResourceManager {
         building.level = building.level + BigNumber(1)
         gameState.buildings[type] = building
         
-        print("✅ Acquistato \(type.rawValue) livello \(building.level.formatted())")
+        Logger.success("Acquistato \(type.rawValue) livello \(building.level.formatted())")
+        Logger.transaction(
+            resource: "Energy",
+            amount: cost.formatted(),
+            type: .subtract,
+            success: true
+        )
         return true
     }
     
@@ -132,7 +138,13 @@ class ResourceManager {
         building.unlocked = true
         gameState.buildings[type] = building
         
-        print("🔓 Sbloccato \(type.rawValue)")
+        Logger.success("Sbloccato \(type.rawValue)")
+        Logger.transaction(
+            resource: "Energy",
+            amount: unlockCost.formatted(),
+            type: .subtract,
+            success: true
+        )
         return true
     }
 }

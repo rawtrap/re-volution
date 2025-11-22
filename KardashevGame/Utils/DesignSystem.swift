@@ -20,9 +20,11 @@ enum DesignSystem {
     
     // MARK: - Typography
     enum Typography {
+        static let largeTitle = Font.system(size: 32, weight: .bold)
         static let title = Font.system(size: 28, weight: .bold)
         static let headline = Font.system(size: 20, weight: .bold)
         static let subheadline = Font.system(size: 18, weight: .semibold)
+        static let emphasizedBody = Font.system(size: 24, weight: .bold)
         static let body = Font.system(size: 16, weight: .regular)
         static let bodyBold = Font.system(size: 16, weight: .bold)
         static let caption = Font.system(size: 12, weight: .regular)
