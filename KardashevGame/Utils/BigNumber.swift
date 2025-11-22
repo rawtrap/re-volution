@@ -41,23 +41,12 @@ struct BigNumber: Codable, Equatable {
         let sign = mantissa < 0 ? -1.0 : 1.0
         var absM = abs(mantissa)
         
-        // Normalizzazione più robusta per valori molto grandi
-        if absM >= 10.0 {
-            let exp = Int(log10(absM))
-            absM /= pow(10.0, Double(exp))
-            exponent += exp
-        }
-        
-        // Normalizzazione per valori molto piccoli
-        while absM < 1.0 && absM > 1e-10 {
-            absM *= 10.0
-            exponent -= 1
-        }
-        
-        // Prevenire floating point errors vicino a 10
-        if absM >= 10.0 - 1e-10 {
-            absM = 1.0
-            exponent += 1
+        // Normalizzazione unificata e robusta usando floor(log10())
+        // Verifica che absM sia maggiore di 0 per evitare log10(0) = -inf
+        if absM > 0 && (absM >= 10.0 || absM < 1.0) {
+            let correction = Int(floor(log10(absM)))
+            absM /= pow(10.0, Double(correction))
+            exponent += correction
         }
         
         mantissa = sign * absM
@@ -77,6 +66,19 @@ struct BigNumber: Codable, Equatable {
             return "0"
         }
         
+        // Per numeri molto piccoli (< 1), usa il valore Double diretto
+        // Threshold for scientific notation
+        let scientificNotationThreshold = 0.001
+        
+        if exponent < 0 {
+            if let doubleValue = toDouble() {
+                if abs(doubleValue) < scientificNotationThreshold {
+                    return String(format: "%.3e", doubleValue)
+                }
+                return String(format: "%.3f", doubleValue)
+            }
+        }
+        
         // Suffissi standard per numeri grandi (ogni 3 ordini di grandezza)
         let suffixes = ["", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc", "Ud", "Dd", 
                        "Td", "Qad", "Qid", "Sxd", "Spd", "Ocd", "Nod", "Vg", "Uvg", "Dvg", "Tvg",
@@ -89,16 +91,12 @@ struct BigNumber: Codable, Equatable {
                        "Qiog", "Sxog", "Spog", "Ocog", "Noog", "Nn", "Unn", "Dnn", "Tnn", "Qann",
                        "Qinn", "Sxnn", "Spnn", "Ocnn", "Nonn", "Ce"] // Fino a 10^303
         
-        var suffixIndex = exponent / 3
-        let displayExponent = exponent % 3
-        var displayMantissa = mantissa * pow(10.0, Double(displayExponent))
+        // Usa l'esponente normalizzato direttamente per determinare il suffixIndex
+        let suffixIndex = exponent / 3
+        let remainder = exponent % 3
         
-        // Gestisce casi in cui la mantissa dopo la regolazione supera 1000
-        // Normalizza iterativamente per evitare ricorsione infinita
-        while abs(displayMantissa) >= 1000.0 && suffixIndex < suffixes.count {
-            displayMantissa /= 1000.0
-            suffixIndex += 1
-        }
+        // Calcola la mantissa da visualizzare in base al resto
+        let displayMantissa = mantissa * pow(10.0, Double(remainder))
         
         return formatted(displayMantissa, suffixIndex: suffixIndex, suffixes: suffixes)
     }
@@ -145,12 +143,18 @@ struct BigNumber: Codable, Equatable {
         if lhs.mantissa == 0 { return rhs }
         if rhs.mantissa == 0 { return lhs }
         
+        // Allinea le mantisse in base alla differenza degli esponenti
         let diff = lhs.exponent - rhs.exponent
-        if diff > 15 { return lhs } // rhs è trascurabile
-        if diff < -15 { return rhs } // lhs è trascurabile
         
-        let rhsAdjusted = rhs.mantissa * pow(10.0, Double(diff))
-        return BigNumber(mantissa: lhs.mantissa + rhsAdjusted, exponent: lhs.exponent)
+        if diff >= 0 {
+            // lhs ha esponente maggiore o uguale
+            let rhsAdjusted = rhs.mantissa * pow(10.0, Double(-diff))
+            return BigNumber(mantissa: lhs.mantissa + rhsAdjusted, exponent: lhs.exponent)
+        } else {
+            // rhs ha esponente maggiore
+            let lhsAdjusted = lhs.mantissa * pow(10.0, Double(diff))
+            return BigNumber(mantissa: lhsAdjusted + rhs.mantissa, exponent: rhs.exponent)
+        }
     }
     
     static func - (lhs: BigNumber, rhs: BigNumber) -> BigNumber {
@@ -168,7 +172,9 @@ struct BigNumber: Codable, Equatable {
     }
     
     static func * (lhs: BigNumber, rhs: Double) -> BigNumber {
-        return BigNumber(mantissa: lhs.mantissa * rhs, exponent: lhs.exponent)
+        // Converti Double in BigNumber e usa la moltiplicazione tra BigNumber
+        let rhsBigNumber = BigNumber(rhs)
+        return lhs * rhsBigNumber
     }
     
     static func < (lhs: BigNumber, rhs: BigNumber) -> Bool {
