@@ -45,6 +45,13 @@
 		382F43592EC0A199000B9A42 /* SeededRandomNumberGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F43572EC0A199000B9A42 /* SeededRandomNumberGenerator.swift */; };
 		382F435C2EC0A1A4000B9A42 /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F435B2EC0A1A4000B9A42 /* Run.swift */; };
 		382F435D2EC0A1A4000B9A42 /* PlanetSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F435A2EC0A1A4000B9A42 /* PlanetSeed.swift */; };
+		3840BCC32ED2197C0052CDDF /* EvolutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840BCC02ED2197C0052CDDF /* EvolutionView.swift */; };
+		3840BCC42ED2197C0052CDDF /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840BCBF2ED2197C0052CDDF /* EventView.swift */; };
+		3840BCC52ED2197C0052CDDF /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840BCC22ED2197C0052CDDF /* LeaderboardView.swift */; };
+		3840BCC62ED2197C0052CDDF /* GameOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840BCC12ED2197C0052CDDF /* GameOverView.swift */; };
+		3840BCCA2ED219A00052CDDF /* GameEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840BCC82ED219A00052CDDF /* GameEvent.swift */; };
+		3840BCCB2ED219A00052CDDF /* ShopItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840BCC92ED219A00052CDDF /* ShopItem.swift */; };
+		3840BCCC2ED219A00052CDDF /* EvolutionPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840BCC72ED219A00052CDDF /* EvolutionPath.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +95,13 @@
 		382F43572EC0A199000B9A42 /* SeededRandomNumberGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeededRandomNumberGenerator.swift; sourceTree = "<group>"; };
 		382F435A2EC0A1A4000B9A42 /* PlanetSeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetSeed.swift; sourceTree = "<group>"; };
 		382F435B2EC0A1A4000B9A42 /* Run.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Run.swift; sourceTree = "<group>"; };
+		3840BCBF2ED2197C0052CDDF /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
+		3840BCC02ED2197C0052CDDF /* EvolutionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionView.swift; sourceTree = "<group>"; };
+		3840BCC12ED2197C0052CDDF /* GameOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverView.swift; sourceTree = "<group>"; };
+		3840BCC22ED2197C0052CDDF /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
+		3840BCC72ED219A00052CDDF /* EvolutionPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionPath.swift; sourceTree = "<group>"; };
+		3840BCC82ED219A00052CDDF /* GameEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEvent.swift; sourceTree = "<group>"; };
+		3840BCC92ED219A00052CDDF /* ShopItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +149,10 @@
 		5000000000000004 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3840BCBF2ED2197C0052CDDF /* EventView.swift */,
+				3840BCC02ED2197C0052CDDF /* EvolutionView.swift */,
+				3840BCC12ED2197C0052CDDF /* GameOverView.swift */,
+				3840BCC22ED2197C0052CDDF /* LeaderboardView.swift */,
 				2000000000000002 /* ContentView.swift */,
 				2000000000000003 /* MainMenuView.swift */,
 				2000000000000004 /* GameView.swift */,
@@ -175,6 +193,9 @@
 		5000000000000007 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3840BCC72ED219A00052CDDF /* EvolutionPath.swift */,
+				3840BCC82ED219A00052CDDF /* GameEvent.swift */,
+				3840BCC92ED219A00052CDDF /* ShopItem.swift */,
 				2000000000000019 /* Civilization.swift */,
 				2000000000000020 /* Resource.swift */,
 				2000000000000021 /* Building.swift */,
@@ -295,6 +316,13 @@
 				1000000000000005 /* ShopView.swift in Sources */,
 				1000000000000006 /* StatsView.swift in Sources */,
 				1000000000000007 /* ResourceDisplayView.swift in Sources */,
+				3840BCC32ED2197C0052CDDF /* EvolutionView.swift in Sources */,
+				3840BCCA2ED219A00052CDDF /* GameEvent.swift in Sources */,
+				3840BCCB2ED219A00052CDDF /* ShopItem.swift in Sources */,
+				3840BCCC2ED219A00052CDDF /* EvolutionPath.swift in Sources */,
+				3840BCC42ED2197C0052CDDF /* EventView.swift in Sources */,
+				3840BCC52ED2197C0052CDDF /* LeaderboardView.swift in Sources */,
+				3840BCC62ED2197C0052CDDF /* GameOverView.swift in Sources */,
 				1000000000000008 /* BuildingCardView.swift in Sources */,
 				382F43532EC0A17A000B9A42 /* RunCardView.swift in Sources */,
 				1000000000000009 /* ClickerButtonView.swift in Sources */,

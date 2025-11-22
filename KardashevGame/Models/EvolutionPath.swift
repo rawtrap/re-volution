@@ -150,25 +150,23 @@ enum CivilizationEvolutionPath: String, Codable, CaseIterable {
         case .baseBiological:
             return EvolutionCost() // Default, no cost
         case .pureBiological:
-            return EvolutionCost(knowledge: BigNumber(1000), energy: BigNumber(500))
+            return EvolutionCost(energy: BigNumber(500), knowledge: BigNumber(1000))
         case .geneticallyEnhanced:
-            return EvolutionCost(knowledge: BigNumber(5000), materials: BigNumber(2000))
+            return EvolutionCost(materials: BigNumber(2000), knowledge: BigNumber(5000))
         case .cyborg:
-            return EvolutionCost(knowledge: BigNumber(20000), materials: BigNumber(10000), energy: BigNumber(5000))
+            return EvolutionCost(energy: BigNumber(5000), materials: BigNumber(10000), knowledge: BigNumber(20000))
         case .digitalUploaded:
-            return EvolutionCost(knowledge: BigNumber(100000), energy: BigNumber(50000))
+            return EvolutionCost(energy: BigNumber(50000), knowledge: BigNumber(100000))
         case .ai:
-            return EvolutionCost(knowledge: BigNumber(500000), energy: BigNumber(200000))
+            return EvolutionCost(energy: BigNumber(200000), knowledge: BigNumber(500000))
         case .collectiveMind:
-            return EvolutionCost(knowledge: BigNumber(80000), food: BigNumber(30000))
+            return EvolutionCost(food: BigNumber(30000), knowledge: BigNumber(80000))
         case .synthetic:
-            return EvolutionCost(knowledge: BigNumber(300000), materials: BigNumber(150000))
+            return EvolutionCost(materials: BigNumber(150000), knowledge: BigNumber(300000))
         case .transcendent:
             return EvolutionCost(
                 energy: BigNumber(1000000),
-                knowledge: BigNumber(1000000),
-                materials: BigNumber(500000),
-                food: BigNumber(500000)
+                food: BigNumber(500000), materials: BigNumber(500000), knowledge: BigNumber(1000000)
             )
         }
     }
@@ -326,9 +324,9 @@ enum StrategicDecision: String, Codable, CaseIterable {
         case .rapidExpansion:
             return DecisionEffects(growthRate: 2.0, happinessChange: -30)
         case .militaryFirst:
-            return DecisionEffects(militaryBonus: 50, energyMult: 0.7)
+            return DecisionEffects(energyMult: 0.7, militaryBonus: 50)
         case .scienceFirst:
-            return DecisionEffects(researchSpeed: 1.8, productionMult: 0.8)
+            return DecisionEffects(productionMult: 0.8, researchSpeed: 1.8)
         case .dysonSphere:
             return DecisionEffects(energyMult: 100.0, initialCost: BigNumber(1000000))
         case .multiplePlanets:
@@ -336,7 +334,7 @@ enum StrategicDecision: String, Codable, CaseIterable {
         case .antimatterFocus:
             return DecisionEffects(energyMult: 5.0, instabilityRisk: 0.2)
         case .quantumResearch:
-            return DecisionEffects(researchSpeed: 2.0, knowledgeMult: 1.5)
+            return DecisionEffects(knowledgeMult: 1.5, researchSpeed: 2.0)
         case .interstellarTrade:
             return DecisionEffects(allResourcesMult: 1.5, externalDependency: 0.3)
         case .galacticEmpire:
@@ -346,9 +344,9 @@ enum StrategicDecision: String, Codable, CaseIterable {
         case .technocracy:
             return DecisionEffects(productionMult: 2.0, happinessChange: -50)
         case .hiveMind:
-            return DecisionEffects(coordinationBonus: 3.0, happinessChange: -100)
+            return DecisionEffects(happinessChange: -100, coordinationBonus: 3.0)
         case .isolation:
-            return DecisionEffects(selfSufficiency: 1.5, externalSupport: 0.0)
+            return DecisionEffects(externalSupport: 0.0, selfSufficiency: 1.5)
         case .preserveHumanity:
             return DecisionEffects(identityPreserved: true, biologicalLimits: true)
         case .embraceChange:
@@ -362,9 +360,9 @@ enum StrategicDecision: String, Codable, CaseIterable {
         case .freeMarket:
             return DecisionEffects(growthRate: 1.8, instabilityRisk: 0.3)
         case .plannedEconomy:
-            return DecisionEffects(stabilityBonus: 40, growthRate: 0.7)
+            return DecisionEffects(growthRate: 0.7, stabilityBonus: 40)
         case .resourceSharing:
-            return DecisionEffects(happinessChange: 30, productionMult: 0.8)
+            return DecisionEffects(productionMult: 0.8, happinessChange: 30)
         case .competitiveGrowth:
             return DecisionEffects(growthRate: 1.5, cooperationPenalty: -40)
         case .sustainableDevelopment:
@@ -380,13 +378,13 @@ enum StrategicDecision: String, Codable, CaseIterable {
         case .deterrence:
             return DecisionEffects(militaryBonus: 30, stabilityBonus: 20)
         case .openBorders:
-            return DecisionEffects(cultureBonus: 50, securityRisk: 0.2)
+            return DecisionEffects(securityRisk: 0.2, cultureBonus: 50)
         case .strictBorders:
             return DecisionEffects(securityBonus: 50, isolationPenalty: -30)
         case .culturalExchange:
             return DecisionEffects(knowledgeMult: 1.4, culturalInfluence: 0.3)
         case .assimilation:
-            return DecisionEffects(uniformityBonus: 30, conflictRisk: 0.3)
+            return DecisionEffects(conflictRisk: 0.3, uniformityBonus: 30)
         case .coexistence:
             return DecisionEffects(diversityBonus: 40, complexityPenalty: 20)
         }

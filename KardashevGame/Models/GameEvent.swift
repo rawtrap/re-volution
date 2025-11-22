@@ -229,8 +229,7 @@ class EventManager {
                     EventChoice(
                         text: "Mantienila segreta e sviluppa armi (+20 Militare)",
                         effects: EventEffects(
-                            militaryChange: 20,
-                            happinessChange: -5
+                            happinessChange: -5, militaryChange: 20
                         )
                     )
                 ]
@@ -265,8 +264,7 @@ class EventManager {
                         requiresResource: .energy,
                         resourceCost: BigNumber(300),
                         effects: EventEffects(
-                            happinessChange: 15,
-                            foodChange: BigNumber(200)
+                            foodChange: BigNumber(200), happinessChange: 15
                         )
                     ),
                     EventChoice(
@@ -333,8 +331,7 @@ class EventManager {
                         requiresResource: .knowledge,
                         resourceCost: BigNumber(300),
                         effects: EventEffects(
-                            knowledgeChange: BigNumber(800),
-                            energyChange: BigNumber(500)
+                            energyChange: BigNumber(500), knowledgeChange: BigNumber(800)
                         )
                     ),
                     EventChoice(
@@ -382,8 +379,7 @@ class EventManager {
                         resourceCost: BigNumber(800),
                         effects: EventEffects(
                             materialsChange: BigNumber(-500),
-                            healthChange: -5,
-                            happinessChange: -5
+                            happinessChange: -5, healthChange: -5
                         )
                     ),
                     EventChoice(
@@ -580,16 +576,14 @@ class EventManager {
                         resourceCost: BigNumber(1000),
                         effects: EventEffects(
                             energyChange: BigNumber(-500),
-                            healthChange: -15,
-                            happinessChange: -20
+                            happinessChange: -20, healthChange: -15
                         )
                     ),
                     EventChoice(
                         text: "Evacuazione zona (Minori costi ma più conseguenze)",
                         effects: EventEffects(
                             energyChange: BigNumber(-800),
-                            healthChange: -30,
-                            happinessChange: -35,
+                            happinessChange: -35, healthChange: -30,
                             gameOverRisk: 0.1,
                             gameOverReason: .nuclearWar
                         )

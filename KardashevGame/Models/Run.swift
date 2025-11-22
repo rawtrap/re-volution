@@ -13,6 +13,7 @@ enum GameOverReason: String, Codable, CaseIterable {
     case completed = "Completata"
     case resourcesDepleted = "Risorse Esaurite"
     case nuclearWar = "Guerra Nucleare"
+    case aiRebellion = "L'AI ha distrutto la civiltà"
     case environmentalCollapse = "Collasso Ambientale"
     case civilWar = "Guerra Civile"
     case pandemic = "Pandemia"
@@ -32,6 +33,7 @@ enum GameOverReason: String, Codable, CaseIterable {
         case .alienInvasion: return "👽"
         case .spaceTimeAnomaly: return "🌀"
         case .abandoned: return "💤"
+        case .aiRebellion: return "🤖"
         }
     }
 }

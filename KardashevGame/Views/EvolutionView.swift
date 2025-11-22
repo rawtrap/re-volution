@@ -117,8 +117,8 @@ struct EvolutionView: View {
                 // Bonuses
                 let bonuses = civPath.bonuses
                 VStack(alignment: .leading, spacing: 4) {
-                    bonusRow(label: "Produzione", value: "x\(bonuses.productionMultiplier, specifier: "%.1f")")
-                    bonusRow(label: "Velocità Ricerca", value: "x\(bonuses.researchSpeed, specifier: "%.1f")")
+                    bonusRow(label: "Produzione", value: "x\(bonuses.productionMultiplier, default: "%.1f")")
+                    bonusRow(label: "Velocità Ricerca", value: "x\(bonuses.researchSpeed, default: "%.1f")")
                     bonusRow(label: "Felicità", value: formatBonus(bonuses.happinessBonus))
                     bonusRow(label: "Resistenza Disastri", value: "\(Int(bonuses.disasterResistance))%")
                     bonusRow(label: "Riduzione Costi Militari", value: "\(Int(bonuses.militaryCostReduction))%")
