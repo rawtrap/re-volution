@@ -23,6 +23,7 @@ enum RunSortOption: String, CaseIterable {
 struct RunSelectionView: View {
     @ObservedObject var runManager = RunManager.shared
     @State private var showNewRun = false
+    @State private var showLeaderboard = false
     @State private var selectedFilter: RunFilter = .all
     @State private var sortOption: RunSortOption = .date
     @State private var runToDelete: Run?
@@ -75,6 +76,9 @@ struct RunSelectionView: View {
         .sheet(isPresented: $showNewRun) {
             NewRunView()
         }
+        .sheet(isPresented: $showLeaderboard) {
+            LeaderboardView()
+        }
         .sheet(item: $selectedRunForStats) { run in
             RunStatsView(run: run)
         }
@@ -99,9 +103,29 @@ struct RunSelectionView: View {
                 .font(.system(size: 36, weight: .bold))
                 .foregroundColor(.white)
             
-            Text("Le Tue Run")
-                .font(.system(size: 18, weight: .medium))
-                .foregroundColor(.kardashevPrimary)
+            HStack(spacing: 12) {
+                Text("Le Tue Run")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(.kardashevPrimary)
+                
+                Button(action: {
+                    showLeaderboard = true
+                }) {
+                    HStack(spacing: 4) {
+                        Text("🏆")
+                            .font(.system(size: 14))
+                        Text("Leaderboard")
+                            .font(.system(size: 12, weight: .medium))
+                    }
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.kardashevAccent)
+                    )
+                }
+            }
             
             // New Run Button
             Button(action: {

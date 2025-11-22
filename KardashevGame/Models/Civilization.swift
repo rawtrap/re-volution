@@ -7,6 +7,22 @@
 
 import Foundation
 
+/// Parametri della civiltà per investimenti
+struct CivilizationParameters: Codable {
+    var happiness: Double = 50.0        // 0-100
+    var transportation: Double = 50.0   // 0-100
+    var food: Double = 50.0            // 0-100
+    var education: Double = 50.0       // 0-100
+    var military: Double = 50.0        // 0-100
+    var health: Double = 50.0          // 0-100
+    
+    /// Calcola il moltiplicatore totale basato sui parametri
+    func overallMultiplier() -> Double {
+        let average = (happiness + transportation + food + education + military + health) / 6.0
+        return 1.0 + (average - 50.0) / 100.0 // Range: 0.5x to 1.5x
+    }
+}
+
 /// Rappresenta la civiltà del giocatore
 struct Civilization: Codable {
     var stage: KardashevStage
@@ -14,6 +30,7 @@ struct Civilization: Codable {
     var prestigeMultiplier: Double
     var totalClicks: BigNumber
     var totalEnergyGenerated: BigNumber
+    var parameters: CivilizationParameters
     
     init() {
         self.stage = .type1
@@ -21,6 +38,7 @@ struct Civilization: Codable {
         self.prestigeMultiplier = 1.0
         self.totalClicks = BigNumber(0)
         self.totalEnergyGenerated = BigNumber(0)
+        self.parameters = CivilizationParameters()
     }
     
     /// Calcola il bonus click corrente

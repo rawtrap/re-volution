@@ -111,26 +111,71 @@ class RunManager: ObservableObject {
     
     // MARK: - Score Calculation
     
-    /// Calcola il punteggio corrente per una run
+    /// Calcola il punteggio corrente per una run con breakdown completo
     func calculateCurrentScore(for run: Run) -> BigNumber {
         let gameState = run.gameState
+        var breakdown = ScoreBreakdown()
         
-        // Score energia: energia totale / 1000
-        let energyScore = gameState.resources.energy.amount / BigNumber(1000.0)
+        // 1. Stage Progress Score (peso 40%)
+        let stageValue = Double(gameState.civilization.stage.rawValue)
+        let stageProgress = run.stageProgress()
+        breakdown.stageProgress = BigNumber((stageValue * 10000 + stageProgress * 5000))
         
-        // Score stage: stage corrente * 10000
-        let stageScore = BigNumber(Double(gameState.civilization.stage.rawValue * 10000))
+        // 2. Efficiency Bonus (peso 15%)
+        // Basato su quanto efficiente è stata la produzione
+        let totalProduction = gameState.resources.energy.amount + 
+                             gameState.resources.food.amount +
+                             gameState.resources.materials.amount +
+                             gameState.resources.knowledge.amount
+        let timeEfficiency = totalProduction / BigNumber(max(1.0, run.totalPlayTime / 60.0)) // Per minuto
+        breakdown.efficiencyBonus = timeEfficiency * 0.5
         
-        // Score progresso: progresso attraverso gli stage * 100
-        let progressScore = BigNumber(run.stageProgress() * 100)
+        // 3. Speed Bonus (peso 10%)
+        // Bonus per completamento veloce degli stage
+        if run.totalPlayTime > 0 {
+            let speedMultiplier = 10000.0 / max(1.0, run.totalPlayTime / 60.0) // Inversamente proporzionale al tempo
+            breakdown.speedBonus = BigNumber(speedMultiplier * 100)
+        }
         
-        // Score base
-        let baseScore = energyScore + stageScore + progressScore
+        // 4. Technology Bonus (peso 10%)
+        breakdown.technologyBonus = run.statistics.technologiesResearched * BigNumber(500)
         
-        // Applica moltiplicatore difficoltà
-        let finalScore = baseScore * run.planetSeed.difficultyRating.scoreMultiplier
+        // 5. Expansion Bonus (peso 10%)
+        breakdown.expansionBonus = run.statistics.planetsColonized * BigNumber(1000) +
+                                  run.statistics.buildingsPurchased * BigNumber(10)
         
-        return finalScore
+        // 6. Difficulty Bonus (peso 10%)
+        let difficultyMult = run.planetSeed.difficultyRating.scoreMultiplier
+        breakdown.difficultyBonus = (breakdown.stageProgress + breakdown.efficiencyBonus) * 
+                                    (difficultyMult - 1.0)
+        
+        // 7. Survival Bonus (peso 5%)
+        // Bonus per sopravvivere a disastri
+        breakdown.survivalBonus = run.statistics.disastersSurvived * BigNumber(2000)
+        
+        // Bonus evoluzione e decisioni
+        if let evolutionPath = run.evolutionPath {
+            if let civPath = CivilizationEvolutionPath(rawValue: evolutionPath.rawValue) {
+                let evolutionBonus = civPath.bonuses.productionMultiplier * 1000
+                breakdown.technologyBonus = breakdown.technologyBonus + BigNumber(evolutionBonus)
+            }
+        }
+        
+        // Bonus per decisioni strategiche
+        let decisionBonus = Double(run.majorDecisions.count) * 500.0
+        breakdown.expansionBonus = breakdown.expansionBonus + BigNumber(decisionBonus)
+        
+        // Bonus parametri civiltà
+        let civParams = gameState.civilization.parameters
+        let avgParam = (civParams.happiness + civParams.transportation + civParams.food +
+                       civParams.education + civParams.military + civParams.health) / 6.0
+        let paramBonus = avgParam * 100.0
+        breakdown.efficiencyBonus = breakdown.efficiencyBonus + BigNumber(paramBonus)
+        
+        // Aggiorna breakdown nella run
+        run.scoreBreakdown = breakdown
+        
+        return breakdown.totalScore
     }
     
     /// Aggiorna il punteggio corrente di una run

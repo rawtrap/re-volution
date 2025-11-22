@@ -15,6 +15,9 @@ class GameManager: ObservableObject {
     @Published var isPaused: Bool = false
     @Published var showOfflineReward: Bool = false
     @Published var offlineReward: OfflineProgressManager.OfflineReward?
+    @Published var showCriticalClick: Bool = false
+    @Published var currentEvent: GameEvent?
+    @Published var showEvent: Bool = false
     
     private var gameTimer: Timer?
     private var saveTimer: Timer?
@@ -81,8 +84,66 @@ class GameManager: ObservableObject {
         // Aggiorna score e statistiche run
         updateRunStatistics(deltaTime: deltaTime)
         
+        // Check for random events
+        checkForRandomEvents()
+        
         // Notifica cambiamenti
         objectWillChange.send()
+    }
+    
+    // MARK: - Events
+    
+    func checkForRandomEvents() {
+        // Don't spawn events if already showing one
+        guard !showEvent, currentEvent == nil else { return }
+        
+        // Check if can spawn
+        guard EventManager.shared.canSpawnEvent() else { return }
+        
+        // Random chance to spawn event (10% per check, roughly every 5-10 minutes with cooldown)
+        guard Double.random(in: 0...1) < 0.1 else { return }
+        
+        // Generate event
+        if let event = EventManager.shared.generateRandomEvent(for: gameState.civilization.stage) {
+            currentEvent = event
+            showEvent = true
+        }
+    }
+    
+    func handleEventChoice(_ choice: EventChoice) {
+        guard let event = currentEvent else { return }
+        
+        // Apply choice effects and check for game over
+        if let gameOverReason = EventManager.shared.applyChoice(choice, to: gameState) {
+            triggerGameOver(reason: gameOverReason)
+        }
+        
+        // Clear current event
+        currentEvent = nil
+        showEvent = false
+        
+        // Save after event
+        saveGame()
+    }
+    
+    // MARK: - Game Over
+    
+    func triggerGameOver(reason: GameOverReason) {
+        guard let currentRun = RunManager.shared.currentRun else { return }
+        
+        // Update run status
+        currentRun.status = reason
+        currentRun.finalScore = currentRun.currentScore
+        
+        // Update disaster statistics if applicable
+        if reason != .completed && reason != .abandoned {
+            currentRun.statistics.disastersSurvived = currentRun.statistics.disastersSurvived + BigNumber(1)
+        }
+        
+        // Save final state
+        RunManager.shared.saveCurrentRun()
+        
+        print("💀 Game Over: \(reason.rawValue)")
     }
     
     // MARK: - Auto Save
@@ -110,7 +171,15 @@ class GameManager: ObservableObject {
     // MARK: - Actions
     
     func performClick() {
-        ResourceManager.shared.performClick(gameState: gameState)
+        let isCritical = ResourceManager.shared.performClick(gameState: gameState)
+        
+        // Show critical click feedback
+        if isCritical {
+            showCriticalClick = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                self?.showCriticalClick = false
+            }
+        }
     }
     
     func purchaseBuilding(_ type: BuildingType) -> Bool {

@@ -40,9 +40,15 @@ class ResourceManager {
     }
     
     /// Esegue un click manuale
-    func performClick(gameState: GameState) {
-        let reward = gameState.civilization.clickReward()
+    func performClick(gameState: GameState) -> Bool {
+        var reward = gameState.civilization.clickReward()
         let selectedResource = gameState.selectedClickResource
+        
+        // Critical Click: 5% chance per 10x reward
+        let isCritical = Double.random(in: 0...1) < 0.05
+        if isCritical {
+            reward = reward * 10.0
+        }
         
         // Aggiungi risorsa alla risorsa selezionata
         gameState.resources[selectedResource].add(reward)
@@ -52,6 +58,8 @@ class ResourceManager {
         if selectedResource == .energy {
             gameState.civilization.totalEnergyGenerated = gameState.civilization.totalEnergyGenerated + reward
         }
+        
+        return isCritical
     }
     
     /// Acquista un edificio

@@ -13,6 +13,7 @@ class GameState: ObservableObject, Codable {
     @Published var resources: ResourceCollection
     @Published var buildings: [BuildingType: Building]
     @Published var technologies: [TechnologyType: Technology]
+    @Published var shopItems: [ShopItemType: ShopItem]
     @Published var lastSaveTime: Date
     @Published var selectedClickResource: ResourceType
     
@@ -21,6 +22,7 @@ class GameState: ObservableObject, Codable {
         self.resources = ResourceCollection()
         self.buildings = [:]
         self.technologies = [:]
+        self.shopItems = [:]
         self.lastSaveTime = Date()
         self.selectedClickResource = .energy
         
@@ -34,6 +36,13 @@ class GameState: ObservableObject, Codable {
         for type in [TechnologyType.efficientSolar, .advancedFission, .fusionBreakthrough, .quantumComputing] {
             technologies[type] = Technology(type: type, researched: false)
         }
+        
+        // Inizializza shop items
+        for type in ShopItemType.allCases {
+            let unlocked = type.unlockStage == .type1 && 
+                          (type.category == .generators || type.category == .civilization)
+            shopItems[type] = ShopItem(type: type, level: BigNumber(0), unlocked: unlocked)
+        }
     }
     
     // MARK: - Codable
@@ -43,6 +52,7 @@ class GameState: ObservableObject, Codable {
         case resources
         case buildings
         case technologies
+        case shopItems
         case lastSaveTime
         case selectedClickResource
     }
@@ -53,6 +63,7 @@ class GameState: ObservableObject, Codable {
         resources = try container.decode(ResourceCollection.self, forKey: .resources)
         buildings = try container.decode([BuildingType: Building].self, forKey: .buildings)
         technologies = try container.decode([TechnologyType: Technology].self, forKey: .technologies)
+        shopItems = try container.decodeIfPresent([ShopItemType: ShopItem].self, forKey: .shopItems) ?? [:]
         lastSaveTime = try container.decode(Date.self, forKey: .lastSaveTime)
         selectedClickResource = try container.decodeIfPresent(ResourceType.self, forKey: .selectedClickResource) ?? .energy
     }
@@ -63,6 +74,7 @@ class GameState: ObservableObject, Codable {
         try container.encode(resources, forKey: .resources)
         try container.encode(buildings, forKey: .buildings)
         try container.encode(technologies, forKey: .technologies)
+        try container.encode(shopItems, forKey: .shopItems)
         try container.encode(lastSaveTime, forKey: .lastSaveTime)
         try container.encode(selectedClickResource, forKey: .selectedClickResource)
     }
