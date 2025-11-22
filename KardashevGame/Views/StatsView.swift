@@ -87,6 +87,8 @@ struct StatsView: View {
                                             Text("Livello \(building.level.formatted())")
                                                 .font(.system(size: 12))
                                                 .foregroundColor(.gray)
+                                                .lineLimit(1)
+                                                .monospacedDigit()
                                         }
                                         
                                         Spacer()
@@ -94,6 +96,8 @@ struct StatsView: View {
                                         Text("+\(building.totalProduction().formatted())/s")
                                             .font(.system(size: 12, weight: .medium))
                                             .foregroundColor(.kardashevSuccess)
+                                            .lineLimit(1)
+                                            .monospacedDigit()
                                     }
                                     .padding()
                                     .cardStyle()

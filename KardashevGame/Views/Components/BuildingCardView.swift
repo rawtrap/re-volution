@@ -40,6 +40,8 @@ struct BuildingCardView: View {
                         Text("Lv. \(building.level.formatted())")
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundColor(.kardashevAccent)
+                            .lineLimit(1)
+                            .monospacedDigit()
                     }
                     
                     // Produzione
@@ -47,6 +49,8 @@ struct BuildingCardView: View {
                         Text("+\(building.totalProduction().formatted())/s")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(.kardashevSuccess)
+                            .lineLimit(1)
+                            .monospacedDigit()
                     }
                 }
             }
@@ -64,6 +68,7 @@ struct BuildingCardView: View {
                             .font(.system(size: 14, weight: .bold))
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
+                            .monospacedDigit()
                     }
                     .foregroundColor(canAfford ? .white : .gray)
                     .padding(.horizontal, 16)

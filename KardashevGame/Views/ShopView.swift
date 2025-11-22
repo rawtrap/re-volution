@@ -271,14 +271,17 @@ struct ShopItemCardView: View {
                     .lineLimit(2)
                 
                 HStack(spacing: 8) {
-                    Text("Livello: \(item.level)")
+                    Text("Livello: \(item.level.formatted())")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(.kardashevAccent)
+                        .lineLimit(1)
+                        .monospacedDigit()
                     
                     if item.level > BigNumber(0) {
                         Text("• Effetto: \(item.currentEffect(), specifier: "%.1f")")
                             .font(.system(size: 12))
                             .foregroundColor(.kardashevSuccess)
+                            .lineLimit(1)
                     }
                 }
             }
@@ -306,6 +309,9 @@ struct ShopItemCardView: View {
                     Text(item.nextLevelCost().formatted())
                         .font(.system(size: 10, weight: .medium))
                         .foregroundColor(canAfford ? .white : .red)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .monospacedDigit()
                 }
             }
         }

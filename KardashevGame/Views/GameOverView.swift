@@ -78,6 +78,9 @@ struct GameOverView: View {
             Text((run.finalScore ?? run.currentScore).formatted())
                 .font(.system(size: 48, weight: .bold))
                 .foregroundColor(.kardashevAccent)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+                .monospacedDigit()
             
             // Score breakdown
             VStack(spacing: 8) {
@@ -102,10 +105,14 @@ struct GameOverView: View {
             Text(label)
                 .font(.system(size: 14))
                 .foregroundColor(.gray)
+                .lineLimit(1)
             Spacer()
             Text(value.formatted())
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .monospacedDigit()
         }
     }
     
@@ -259,10 +266,14 @@ struct GameOverView: View {
             Text(label)
                 .font(.system(size: 14))
                 .foregroundColor(.gray)
+                .lineLimit(1)
             Spacer()
             Text(value)
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .monospacedDigit()
         }
     }
     
