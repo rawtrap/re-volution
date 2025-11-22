@@ -42,7 +42,8 @@ struct BigNumber: Codable, Equatable {
         var absM = abs(mantissa)
         
         // Normalizzazione unificata e robusta usando floor(log10())
-        if absM >= 10.0 || absM < 1.0 {
+        // Verifica che absM sia maggiore di 0 per evitare log10(0) = -inf
+        if absM > 0 && (absM >= 10.0 || absM < 1.0) {
             let correction = Int(floor(log10(absM)))
             absM /= pow(10.0, Double(correction))
             exponent += correction
@@ -66,9 +67,12 @@ struct BigNumber: Codable, Equatable {
         }
         
         // Per numeri molto piccoli (< 1), usa il valore Double diretto
+        // Threshold for scientific notation
+        let scientificNotationThreshold = 0.001
+        
         if exponent < 0 {
             if let doubleValue = toDouble() {
-                if abs(doubleValue) < 0.001 {
+                if abs(doubleValue) < scientificNotationThreshold {
                     return String(format: "%.3e", doubleValue)
                 }
                 return String(format: "%.3f", doubleValue)
