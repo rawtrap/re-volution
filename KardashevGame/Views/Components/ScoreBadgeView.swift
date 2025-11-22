@@ -21,7 +21,7 @@ struct ScoreBadgeView: View {
                 .font(.system(size: 18, weight: .bold, design: .rounded))
                 .foregroundColor(.kardashevAccent)
                 .lineLimit(1)
-                .minimumScaleFactor(UIConstants.minimumScaleFactor)
+                .minimumScaleFactor(0.7)
                 .allowsTightening(true)
                 .monospacedDigit()
         }

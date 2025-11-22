@@ -88,14 +88,15 @@ struct BigNumber: Codable, Equatable {
                        "Qiog", "Sxog", "Spog", "Ocog", "Noog", "Nn", "Unn", "Dnn", "Tnn", "Qann",
                        "Qinn", "Sxnn", "Spnn", "Ocnn", "Nonn", "Ce"] // Fino a 10^303
         
-        let suffixIndex = exponent / 3
+        var suffixIndex = exponent / 3
         let displayExponent = exponent % 3
         var displayMantissa = mantissa * pow(10.0, Double(displayExponent))
         
         // Gestisce casi in cui la mantissa dopo la regolazione supera 1000
-        if abs(displayMantissa) >= 1000.0 {
+        // Normalizza iterativamente per evitare ricorsione infinita
+        while abs(displayMantissa) >= 1000.0 && suffixIndex < suffixes.count {
             displayMantissa /= 1000.0
-            return formatted(displayMantissa, suffixIndex: suffixIndex + 1, suffixes: suffixes)
+            suffixIndex += 1
         }
         
         return formatted(displayMantissa, suffixIndex: suffixIndex, suffixes: suffixes)
@@ -131,7 +132,9 @@ struct BigNumber: Codable, Equatable {
             }
         } else {
             // Per numeri estremamente grandi usa notazione scientifica
-            return String(format: "%.2fe%d", mantissa, exponent)
+            // Calcola l'esponente effettivo considerando il suffixIndex
+            let effectiveExponent = suffixIndex * 3 + Int(log10(abs(value)))
+            return String(format: "%.2fe%d", value, effectiveExponent)
         }
     }
     

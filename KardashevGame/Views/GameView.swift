@@ -156,11 +156,20 @@ struct GameView: View {
                             .lineLimit(1)
                         
                         if gameManager.gameState.civilization.prestigeLevel > BigNumber(0) {
-                            Text("Prestige: \(gameManager.gameState.civilization.prestigeLevel.formatted()) (\(gameManager.gameState.civilization.prestigeMultiplier, specifier: "%.2f")x)")
-                                .font(.system(size: 12))
-                                .foregroundColor(.kardashevAccent)
-                                .lineLimit(1)
-                                .minimumScaleFactor(UIConstants.minimumScaleFactor)
+                            HStack(spacing: 4) {
+                                Text("Prestige:")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.gray)
+                                Text(gameManager.gameState.civilization.prestigeLevel.formatted())
+                                    .font(.system(size: 12, weight: .bold))
+                                    .foregroundColor(.kardashevAccent)
+                                    .monospacedDigit()
+                                Text("(\(gameManager.gameState.civilization.prestigeMultiplier, specifier: "%.2f")x)")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.kardashevAccent)
+                            }
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                         }
                     }
                     .padding(.horizontal, 16)
