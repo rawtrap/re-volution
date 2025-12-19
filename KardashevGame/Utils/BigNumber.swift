@@ -184,11 +184,11 @@ struct BigNumber: Codable, Equatable {
         // Align to the larger exponent for better precision
         if expDiff >= 0 {
             // lhs has larger or equal exponent, adjust rhs
-            let rhsAdjusted = rhs.mantissa * pow(10.0, Double(expDiff))
+            let rhsAdjusted = rhs.mantissa / pow(10.0, Double(expDiff))
             return BigNumber(mantissa: lhs.mantissa - rhsAdjusted, exponent: lhs.exponent)
         } else {
             // rhs has larger exponent, adjust lhs
-            let lhsAdjusted = lhs.mantissa * pow(10.0, Double(-expDiff))
+            let lhsAdjusted = lhs.mantissa / pow(10.0, Double(-expDiff))
             return BigNumber(mantissa: lhsAdjusted - rhs.mantissa, exponent: rhs.exponent)
         }
     }
