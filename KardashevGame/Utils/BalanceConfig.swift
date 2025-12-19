@@ -73,7 +73,12 @@ struct BalanceConfig {
         if let ld = level.toDouble() {
             levelValue = ld
         } else {
-            // Approssimazione per livelli enormi
+            // Approssimazione per livelli enormi - protezione overflow
+            // Se l'esponente è troppo grande, potrebbe causare overflow
+            if level.exponent > 308 {
+                // Per esponenti enormi, usa il massimo rappresentabile
+                return BigNumber(mantissa: 9.99, exponent: 308)
+            }
             levelValue = level.mantissa * pow(10.0, Double(level.exponent))
         }
         

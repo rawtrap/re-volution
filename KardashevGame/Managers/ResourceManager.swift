@@ -10,9 +10,6 @@ import Foundation
 class ResourceManager {
     static let shared = ResourceManager()
     
-    // Thread-safe queue per operazioni su risorse
-    private let resourceQueue = DispatchQueue(label: "com.kardashev.resources", qos: .userInteractive)
-    
     private init() {}
     
     /// Calcola la produzione totale per secondo

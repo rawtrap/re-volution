@@ -18,7 +18,7 @@ struct BigNumber: Codable, Equatable {
             self.exponent = 0
         } else {
             let absValue = abs(value)
-            let exp = Int(log10(absValue))
+            let exp = Int(floor(log10(absValue)))
             self.mantissa = value / pow(10.0, Double(exp))
             self.exponent = exp
         }
@@ -54,6 +54,13 @@ struct BigNumber: Codable, Equatable {
             exponent -= 1
         }
         
+        // Handle values that fall below threshold - treat as zero
+        if absM <= 1e-10 && absM > 0 {
+            mantissa = 0
+            exponent = 0
+            return
+        }
+        
         // Prevenire floating point errors vicino a 10
         if absM >= 10.0 - 1e-10 {
             absM = 1.0
@@ -83,9 +90,9 @@ struct BigNumber: Codable, Equatable {
                        "Qav", "Qiv", "Sxv", "Spv", "Ocv", "Nov", "Tg", "Utg", "Dtg", "Ttg", "Qatg",
                        "Qitg", "Sxtg", "Sptg", "Octg", "Notg", "Qg", "Uqg", "Dqg", "Tqg", "Qaqg",
                        "Qiqg", "Sxqg", "Spqg", "Ocqg", "Noqg", "Qq", "Uqq", "Dqq", "Tqq", "Qaqq",
-                       "Qiqq", "Sxqq", "Spqq", "Ocqq", "Noqq", "Sx", "Usx", "Dsx", "Tsx", "Qasx",
-                       "Qisx", "Sxsx", "Spsx", "Ocsx", "Nosx", "Sp", "Usp", "Dsp", "Tsp", "Qasp",
-                       "Qisp", "Sxsp", "Spsp", "Ocsp", "Nosp", "Og", "Uog", "Dog", "Tog", "Qaog",
+                       "Qiqq", "Sxqq", "Spqq", "Ocqq", "Noqq", "Sg", "Usg", "Dsg", "Tsg", "Qasg",
+                       "Qisg", "Sxsg", "Spsg", "Ocsg", "Nosg", "St", "Ust", "Dst", "Tst", "Qast",
+                       "Qist", "Sxst", "Spst", "Ocst", "Nost", "Og", "Uog", "Dog", "Tog", "Qaog",
                        "Qiog", "Sxog", "Spog", "Ocog", "Noog", "Nn", "Unn", "Dnn", "Tnn", "Qann",
                        "Qinn", "Sxnn", "Spnn", "Ocnn", "Nonn", "Ce"] // Fino a 10^303
         
@@ -145,16 +152,45 @@ struct BigNumber: Codable, Equatable {
         if lhs.mantissa == 0 { return rhs }
         if rhs.mantissa == 0 { return lhs }
         
-        let diff = lhs.exponent - rhs.exponent
-        if diff > 15 { return lhs } // rhs è trascurabile
-        if diff < -15 { return rhs } // lhs è trascurabile
+        let expDiff = lhs.exponent - rhs.exponent
+        if expDiff > 15 { return lhs } // rhs è trascurabile
+        if expDiff < -15 { return rhs } // lhs è trascurabile
         
-        let rhsAdjusted = rhs.mantissa * pow(10.0, Double(diff))
-        return BigNumber(mantissa: lhs.mantissa + rhsAdjusted, exponent: lhs.exponent)
+        // Align to the larger exponent for better precision
+        if expDiff >= 0 {
+            // lhs has larger or equal exponent, adjust rhs
+            let rhsAdjusted = rhs.mantissa / pow(10.0, Double(expDiff))
+            return BigNumber(mantissa: lhs.mantissa + rhsAdjusted, exponent: lhs.exponent)
+        } else {
+            // rhs has larger exponent, adjust lhs
+            let lhsAdjusted = lhs.mantissa / pow(10.0, Double(-expDiff))
+            return BigNumber(mantissa: lhsAdjusted + rhs.mantissa, exponent: rhs.exponent)
+        }
     }
     
     static func - (lhs: BigNumber, rhs: BigNumber) -> BigNumber {
-        return lhs + BigNumber(mantissa: -rhs.mantissa, exponent: rhs.exponent)
+        if rhs.mantissa == 0 { return lhs }
+        if lhs.mantissa == 0 { 
+            return BigNumber(mantissa: -rhs.mantissa, exponent: rhs.exponent)
+        }
+        
+        let expDiff = lhs.exponent - rhs.exponent
+        if expDiff > 15 { return lhs } // rhs è trascurabile
+        if expDiff < -15 { 
+            // lhs è trascurabile rispetto a -rhs
+            return BigNumber(mantissa: -rhs.mantissa, exponent: rhs.exponent)
+        }
+        
+        // Align to the larger exponent for better precision
+        if expDiff >= 0 {
+            // lhs has larger or equal exponent, adjust rhs
+            let rhsAdjusted = rhs.mantissa * pow(10.0, Double(expDiff))
+            return BigNumber(mantissa: lhs.mantissa - rhsAdjusted, exponent: lhs.exponent)
+        } else {
+            // rhs has larger exponent, adjust lhs
+            let lhsAdjusted = lhs.mantissa * pow(10.0, Double(-expDiff))
+            return BigNumber(mantissa: lhsAdjusted - rhs.mantissa, exponent: rhs.exponent)
+        }
     }
     
     static func * (lhs: BigNumber, rhs: BigNumber) -> BigNumber {
@@ -170,6 +206,26 @@ struct BigNumber: Codable, Equatable {
     static func * (lhs: BigNumber, rhs: Double) -> BigNumber {
         return BigNumber(mantissa: lhs.mantissa * rhs, exponent: lhs.exponent)
     }
+    
+    // MARK: - Compound Assignment Operators
+    
+    static func += (lhs: inout BigNumber, rhs: BigNumber) {
+        lhs = lhs + rhs
+    }
+    
+    static func -= (lhs: inout BigNumber, rhs: BigNumber) {
+        lhs = lhs - rhs
+    }
+    
+    static func *= (lhs: inout BigNumber, rhs: BigNumber) {
+        lhs = lhs * rhs
+    }
+    
+    static func /= (lhs: inout BigNumber, rhs: BigNumber) {
+        lhs = lhs / rhs
+    }
+    
+    // MARK: - Comparison Operators
     
     static func < (lhs: BigNumber, rhs: BigNumber) -> Bool {
         return compare(lhs, rhs) == .orderedAscending
